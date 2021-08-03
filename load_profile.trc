@@ -1,0 +1,1457 @@
+SELECT s.snap_id, TO_CHAR(begin_interval_time,'YYYYMMDDHH24MI') AS snap_time,
+       (cast(s.end_interval_time as date) - cast(s.begin_interval_time as date))*24*3600 ela
+FROM DBA_HIST_SNAPSHOT S
+WHERE s.end_interval_time >= TO_DATE('2020_1116_000000','YYYY_MMDD_HH24MISS')
+and s.end_interval_time <= TO_DATE('2020_1117_235959','YYYY_MMDD_HH24MISS')
+
+ df_snapshots  
+
+['SNAP_ID', 'SNAP_TIME', 'VALUE', 'STAT_NAME']
++----+-----------+--------------+---------+-------------+
+|    |   SNAP_ID |    SNAP_TIME |   VALUE | STAT_NAME   |
+|----+-----------+--------------+---------+-------------|
+|  0 |     72880 | 202011170300 |    3605 | elapsed     |
+|  1 |     72857 | 202011160400 |    3603 | elapsed     |
+|  2 |     72886 | 202011170900 |    3605 | elapsed     |
+|  3 |     72860 | 202011160700 |    3603 | elapsed     |
+|  4 |     72878 | 202011170100 |    3543 | elapsed     |
+|  5 |     72887 | 202011171000 |    3606 | elapsed     |
+|  6 |     72853 | 202011160000 |    3603 | elapsed     |
+|  7 |     72888 | 202011171100 |    3605 | elapsed     |
+|  8 |     72896 | 202011171900 |    3606 | elapsed     |
+|  9 |     72861 | 202011160800 |    3605 | elapsed     |
+| 10 |     72877 | 202011170000 |    3604 | elapsed     |
+| 11 |     72891 | 202011171400 |    3545 | elapsed     |
+| 12 |     72899 | 202011172200 |    3606 | elapsed     |
+| 13 |     72859 | 202011160600 |    3604 | elapsed     |
+| 14 |     72852 | 202011152300 |    3604 | elapsed     |
+| 15 |     72854 | 202011160100 |    3604 | elapsed     |
+| 16 |     72855 | 202011160200 |    3604 | elapsed     |
+| 17 |     72856 | 202011160300 |    3604 | elapsed     |
+| 18 |     72868 | 202011161500 |    3605 | elapsed     |
+| 19 |     72870 | 202011161700 |    3604 | elapsed     |
+| 20 |     72871 | 202011161800 |    3605 | elapsed     |
+| 21 |     72872 | 202011161900 |    3604 | elapsed     |
+| 22 |     72881 | 202011170400 |    3604 | elapsed     |
+| 23 |     72884 | 202011170700 |    3604 | elapsed     |
+| 24 |     72864 | 202011161100 |    3604 | elapsed     |
+| 25 |     72890 | 202011171300 |    3606 | elapsed     |
+| 26 |     72862 | 202011160900 |    3604 | elapsed     |
+| 27 |     72866 | 202011161300 |    3605 | elapsed     |
+| 28 |     72867 | 202011161400 |    3606 | elapsed     |
+| 29 |     72873 | 202011162000 |    3605 | elapsed     |
+| 30 |     72874 | 202011162100 |    3605 | elapsed     |
+| 31 |     72875 | 202011162200 |    3605 | elapsed     |
+| 32 |     72885 | 202011170800 |    3604 | elapsed     |
+| 33 |     72879 | 202011170200 |    3604 | elapsed     |
+| 34 |     72863 | 202011161000 |    3606 | elapsed     |
+| 35 |     72865 | 202011161200 |    3545 | elapsed     |
+| 36 |     72858 | 202011160500 |    3604 | elapsed     |
+| 37 |     72869 | 202011161600 |    3606 | elapsed     |
+| 38 |     72876 | 202011162300 |    3605 | elapsed     |
+| 39 |     72882 | 202011170500 |    3603 | elapsed     |
+| 40 |     72883 | 202011170600 |    3604 | elapsed     |
+| 41 |     72889 | 202011171200 |    3604 | elapsed     |
+| 42 |     72892 | 202011171500 |    3606 | elapsed     |
+| 43 |     72893 | 202011171600 |    3606 | elapsed     |
+| 44 |     72894 | 202011171700 |    3604 | elapsed     |
+| 45 |     72895 | 202011171800 |    3605 | elapsed     |
+| 46 |     72897 | 202011172000 |    3605 | elapsed     |
+| 47 |     72898 | 202011172100 |    3606 | elapsed     |
++----+-----------+--------------+---------+-------------+select snap_id, TO_CHAR(begin_interval_time,'YYYYMMDDHH24MI') AS snap_time, stat_name,  sum(delta_value) value from 
+    (select hs.snap_id, begin_interval_time, stat_name,
+        value-(lag(value,1) over(partition by hs.startup_time, stat_name order by hss.snap_id)) delta_value
+    from dba_hist_sysstat hss, dba_hist_snapshot hs
+    where hss.snap_id=hs.snap_id 
+        and hss.instance_number=hs.instance_number
+        and hs.begin_interval_time >= TO_DATE('2020_1116_000000','YYYY_MMDD_HH24MISS')
+        and hs.end_interval_time <= TO_DATE('2020_1117_235959','YYYY_MMDD_HH24MISS')
+        and hss.stat_name = 'user commits') 
+group by snap_id, TO_CHAR(begin_interval_time,'YYYYMMDDHH24MI'), stat_name
+order by TO_CHAR(begin_interval_time,'YYYYMMDDHH24MI')
+
+ df_commits  
+
+['SNAP_ID', 'SNAP_TIME', 'STAT_NAME', 'VALUE']
++----+-----------+--------------+--------------+---------+
+|    |   SNAP_ID |    SNAP_TIME | STAT_NAME    |   VALUE |
+|----+-----------+--------------+--------------+---------|
+|  0 |     72853 | 202011160000 | user commits |     nan |
+|  1 |     72854 | 202011160100 | user commits |     372 |
+|  2 |     72855 | 202011160200 | user commits |     419 |
+|  3 |     72856 | 202011160300 | user commits |     350 |
+|  4 |     72857 | 202011160400 | user commits |     813 |
+|  5 |     72858 | 202011160500 | user commits |    6851 |
+|  6 |     72859 | 202011160600 | user commits |    9290 |
+|  7 |     72860 | 202011160700 | user commits |    5648 |
+|  8 |     72861 | 202011160800 | user commits |    5189 |
+|  9 |     72862 | 202011160900 | user commits |   10475 |
+| 10 |     72863 | 202011161000 | user commits |  117818 |
+| 11 |     72864 | 202011161100 | user commits |    8230 |
+| 12 |     72865 | 202011161200 | user commits |    6466 |
+| 13 |     72866 | 202011161300 | user commits |    4745 |
+| 14 |     72867 | 202011161400 | user commits |    4943 |
+| 15 |     72868 | 202011161500 | user commits |    4816 |
+| 16 |     72869 | 202011161600 | user commits |    5161 |
+| 17 |     72870 | 202011161700 | user commits |    6773 |
+| 18 |     72871 | 202011161800 | user commits |    4429 |
+| 19 |     72872 | 202011161900 | user commits |    2209 |
+| 20 |     72873 | 202011162000 | user commits |    3569 |
+| 21 |     72874 | 202011162100 | user commits |    2005 |
+| 22 |     72875 | 202011162200 | user commits |    2110 |
+| 23 |     72876 | 202011162300 | user commits |    3526 |
+| 24 |     72877 | 202011170000 | user commits |     150 |
+| 25 |     72878 | 202011170100 | user commits |     319 |
+| 26 |     72879 | 202011170200 | user commits |     484 |
+| 27 |     72880 | 202011170300 | user commits |     409 |
+| 28 |     72881 | 202011170400 | user commits |     766 |
+| 29 |     72882 | 202011170500 | user commits |    4889 |
+| 30 |     72883 | 202011170600 | user commits |    1841 |
+| 31 |     72884 | 202011170700 | user commits |    2542 |
+| 32 |     72885 | 202011170800 | user commits |   74051 |
+| 33 |     72886 | 202011170900 | user commits |    9802 |
+| 34 |     72887 | 202011171000 | user commits |   87958 |
+| 35 |     72888 | 202011171100 | user commits |    7242 |
+| 36 |     72889 | 202011171200 | user commits |    6161 |
+| 37 |     72890 | 202011171300 | user commits |    2995 |
+| 38 |     72891 | 202011171400 | user commits |    4590 |
+| 39 |     72892 | 202011171500 | user commits |    3335 |
+| 40 |     72893 | 202011171600 | user commits |    4189 |
+| 41 |     72894 | 202011171700 | user commits |    3413 |
+| 42 |     72895 | 202011171800 | user commits |    2844 |
+| 43 |     72896 | 202011171900 | user commits |    1028 |
+| 44 |     72897 | 202011172000 | user commits |    2018 |
+| 45 |     72898 | 202011172100 | user commits |    1057 |
+| 46 |     72899 | 202011172200 | user commits |    3590 |
++----+-----------+--------------+--------------+---------+
+ df_sysstat  
+
+['SNAP_ID', 'SNAP_TIME', 'STAT_NAME', 'VALUE']
++-----+-----------+--------------+----------------------------+------------------+
+|     |   SNAP_ID |    SNAP_TIME | STAT_NAME                  |            VALUE |
+|-----+-----------+--------------+----------------------------+------------------|
+|   0 |     72853 | 202011160000 | CPU used by this session   |    nan           |
+|   1 |     72853 | 202011160000 | db block changes           |    nan           |
+|   2 |     72853 | 202011160000 | execute count              |    nan           |
+|   3 |     72853 | 202011160000 | logons cumulative          |    nan           |
+|   4 |     72853 | 202011160000 | parse count (hard)         |    nan           |
+|   5 |     72853 | 202011160000 | parse count (total)        |    nan           |
+|   6 |     72853 | 202011160000 | parse time cpu             |    nan           |
+|   7 |     72853 | 202011160000 | physical read total bytes  |    nan           |
+|   8 |     72853 | 202011160000 | physical write total bytes |    nan           |
+|   9 |     72853 | 202011160000 | redo size                  |    nan           |
+|  10 |     72853 | 202011160000 | session logical reads      |    nan           |
+|  11 |     72853 | 202011160000 | sorts (disk)               |    nan           |
+|  12 |     72853 | 202011160000 | user calls                 |    nan           |
+|  13 |     72854 | 202011160100 | CPU used by this session   |   2633           |
+|  14 |     72854 | 202011160100 | db block changes           |  51848           |
+|  15 |     72854 | 202011160100 | execute count              | 280730           |
+|  16 |     72854 | 202011160100 | logons cumulative          |    309           |
+|  17 |     72854 | 202011160100 | parse count (hard)         |     70           |
+|  18 |     72854 | 202011160100 | parse count (total)        |   2937           |
+|  19 |     72854 | 202011160100 | parse time cpu             |     34           |
+|  20 |     72854 | 202011160100 | physical read total bytes  |      2.0447e+09  |
+|  21 |     72854 | 202011160100 | physical write total bytes |      2.61063e+08 |
+|  22 |     72854 | 202011160100 | redo size                  |      1.32136e+07 |
+|  23 |     72854 | 202011160100 | session logical reads      | 651293           |
+|  24 |     72854 | 202011160100 | sorts (disk)               |      0           |
+|  25 |     72854 | 202011160100 | user calls                 |   3865           |
+|  26 |     72855 | 202011160200 | CPU used by this session   |   1227           |
+|  27 |     72855 | 202011160200 | db block changes           |  40570           |
+|  28 |     72855 | 202011160200 | execute count              |   8540           |
+|  29 |     72855 | 202011160200 | logons cumulative          |    313           |
+|  30 |     72855 | 202011160200 | parse count (hard)         |    110           |
+|  31 |     72855 | 202011160200 | parse count (total)        |   2951           |
+|  32 |     72855 | 202011160200 | parse time cpu             |     14           |
+|  33 |     72855 | 202011160200 | physical read total bytes  |      1.21938e+09 |
+|  34 |     72855 | 202011160200 | physical write total bytes |      1.06547e+08 |
+|  35 |     72855 | 202011160200 | redo size                  |      1.09662e+07 |
+|  36 |     72855 | 202011160200 | session logical reads      | 530511           |
+|  37 |     72855 | 202011160200 | sorts (disk)               |      0           |
+|  38 |     72855 | 202011160200 | user calls                 |   4539           |
+|  39 |     72856 | 202011160300 | CPU used by this session   |   1205           |
+|  40 |     72856 | 202011160300 | db block changes           |  31928           |
+|  41 |     72856 | 202011160300 | execute count              |   6787           |
+|  42 |     72856 | 202011160300 | logons cumulative          |    310           |
+|  43 |     72856 | 202011160300 | parse count (hard)         |      5           |
+|  44 |     72856 | 202011160300 | parse count (total)        |   2481           |
+|  45 |     72856 | 202011160300 | parse time cpu             |     12           |
+|  46 |     72856 | 202011160300 | physical read total bytes  |      1.21987e+09 |
+|  47 |     72856 | 202011160300 | physical write total bytes |      1.03568e+08 |
+|  48 |     72856 | 202011160300 | redo size                  |      9.8022e+06  |
+|  49 |     72856 | 202011160300 | session logical reads      | 491386           |
+|  50 |     72856 | 202011160300 | sorts (disk)               |      0           |
+|  51 |     72856 | 202011160300 | user calls                 |   4049           |
+|  52 |     72857 | 202011160400 | CPU used by this session   |   4845           |
+|  53 |     72857 | 202011160400 | db block changes           | 390126           |
+|  54 |     72857 | 202011160400 | execute count              |  39027           |
+|  55 |     72857 | 202011160400 | logons cumulative          |    439           |
+|  56 |     72857 | 202011160400 | parse count (hard)         |    102           |
+|  57 |     72857 | 202011160400 | parse count (total)        |  23230           |
+|  58 |     72857 | 202011160400 | parse time cpu             |     61           |
+|  59 |     72857 | 202011160400 | physical read total bytes  |      4.84526e+10 |
+|  60 |     72857 | 202011160400 | physical write total bytes |      3.68706e+08 |
+|  61 |     72857 | 202011160400 | redo size                  |      9.44941e+07 |
+|  62 |     72857 | 202011160400 | session logical reads      |      1.09455e+07 |
+|  63 |     72857 | 202011160400 | sorts (disk)               |      0           |
+|  64 |     72857 | 202011160400 | user calls                 |  45157           |
+|  65 |     72858 | 202011160500 | CPU used by this session   |  28978           |
+|  66 |     72858 | 202011160500 | db block changes           |      1.36411e+07 |
+|  67 |     72858 | 202011160500 | execute count              | 454771           |
+|  68 |     72858 | 202011160500 | logons cumulative          |   1117           |
+|  69 |     72858 | 202011160500 | parse count (hard)         |   1292           |
+|  70 |     72858 | 202011160500 | parse count (total)        |  86158           |
+|  71 |     72858 | 202011160500 | parse time cpu             |    382           |
+|  72 |     72858 | 202011160500 | physical read total bytes  |      1.87486e+11 |
+|  73 |     72858 | 202011160500 | physical write total bytes |      1.8339e+10  |
+|  74 |     72858 | 202011160500 | redo size                  |      3.30699e+09 |
+|  75 |     72858 | 202011160500 | session logical reads      |      8.95939e+07 |
+|  76 |     72858 | 202011160500 | sorts (disk)               |      0           |
+|  77 |     72858 | 202011160500 | user calls                 | 255206           |
+|  78 |     72859 | 202011160600 | CPU used by this session   |  46989           |
+|  79 |     72859 | 202011160600 | db block changes           |      2.21189e+07 |
+|  80 |     72859 | 202011160600 | execute count              | 740990           |
+|  81 |     72859 | 202011160600 | logons cumulative          |   1507           |
+|  82 |     72859 | 202011160600 | parse count (hard)         |   1645           |
+|  83 |     72859 | 202011160600 | parse count (total)        | 530794           |
+|  84 |     72859 | 202011160600 | parse time cpu             |    901           |
+|  85 |     72859 | 202011160600 | physical read total bytes  |      3.07303e+11 |
+|  86 |     72859 | 202011160600 | physical write total bytes |      2.25244e+10 |
+|  87 |     72859 | 202011160600 | redo size                  |      5.36146e+09 |
+|  88 |     72859 | 202011160600 | session logical reads      |      1.59649e+08 |
+|  89 |     72859 | 202011160600 | sorts (disk)               |      0           |
+|  90 |     72859 | 202011160600 | user calls                 | 843989           |
+|  91 |     72860 | 202011160700 | CPU used by this session   |  38654           |
+|  92 |     72860 | 202011160700 | db block changes           |      9.44365e+06 |
+|  93 |     72860 | 202011160700 | execute count              | 294710           |
+|  94 |     72860 | 202011160700 | logons cumulative          |   1850           |
+|  95 |     72860 | 202011160700 | parse count (hard)         |   1456           |
+|  96 |     72860 | 202011160700 | parse count (total)        | 183164           |
+|  97 |     72860 | 202011160700 | parse time cpu             |    698           |
+|  98 |     72860 | 202011160700 | physical read total bytes  |      2.3987e+11  |
+|  99 |     72860 | 202011160700 | physical write total bytes |      1.14206e+10 |
+| 100 |     72860 | 202011160700 | redo size                  |      2.40007e+09 |
+| 101 |     72860 | 202011160700 | session logical reads      |      1.24164e+08 |
+| 102 |     72860 | 202011160700 | sorts (disk)               |      0           |
+| 103 |     72860 | 202011160700 | user calls                 | 392990           |
+| 104 |     72861 | 202011160800 | CPU used by this session   |  47532           |
+| 105 |     72861 | 202011160800 | db block changes           |      5.5065e+06  |
+| 106 |     72861 | 202011160800 | execute count              | 408845           |
+| 107 |     72861 | 202011160800 | logons cumulative          |   1714           |
+| 108 |     72861 | 202011160800 | parse count (hard)         |   2337           |
+| 109 |     72861 | 202011160800 | parse count (total)        |  83477           |
+| 110 |     72861 | 202011160800 | parse time cpu             |   1236           |
+| 111 |     72861 | 202011160800 | physical read total bytes  |      6.49714e+11 |
+| 112 |     72861 | 202011160800 | physical write total bytes |      5.61924e+09 |
+| 113 |     72861 | 202011160800 | redo size                  |      1.19375e+09 |
+| 114 |     72861 | 202011160800 | session logical reads      |      1.39231e+08 |
+| 115 |     72861 | 202011160800 | sorts (disk)               |      0           |
+| 116 |     72861 | 202011160800 | user calls                 | 181774           |
+| 117 |     72862 | 202011160900 | CPU used by this session   |  66757           |
+| 118 |     72862 | 202011160900 | db block changes           |      4.59433e+07 |
+| 119 |     72862 | 202011160900 | execute count              | 407767           |
+| 120 |     72862 | 202011160900 | logons cumulative          |   1958           |
+| 121 |     72862 | 202011160900 | parse count (hard)         |  26550           |
+| 122 |     72862 | 202011160900 | parse count (total)        |  72610           |
+| 123 |     72862 | 202011160900 | parse time cpu             |   4220           |
+| 124 |     72862 | 202011160900 | physical read total bytes  |      2.7132e+11  |
+| 125 |     72862 | 202011160900 | physical write total bytes |      4.52812e+10 |
+| 126 |     72862 | 202011160900 | redo size                  |      9.88165e+09 |
+| 127 |     72862 | 202011160900 | session logical reads      |      1.31954e+08 |
+| 128 |     72862 | 202011160900 | sorts (disk)               |      0           |
+| 129 |     72862 | 202011160900 | user calls                 | 226795           |
+| 130 |     72863 | 202011161000 | CPU used by this session   | 165875           |
+| 131 |     72863 | 202011161000 | db block changes           |      2.4276e+07  |
+| 132 |     72863 | 202011161000 | execute count              | 670870           |
+| 133 |     72863 | 202011161000 | logons cumulative          |   2646           |
+| 134 |     72863 | 202011161000 | parse count (hard)         |  81688           |
+| 135 |     72863 | 202011161000 | parse count (total)        | 222044           |
+| 136 |     72863 | 202011161000 | parse time cpu             |   6886           |
+| 137 |     72863 | 202011161000 | physical read total bytes  |      2.21732e+12 |
+| 138 |     72863 | 202011161000 | physical write total bytes |      2.46086e+10 |
+| 139 |     72863 | 202011161000 | redo size                  |      5.35298e+09 |
+| 140 |     72863 | 202011161000 | session logical reads      |      3.96594e+08 |
+| 141 |     72863 | 202011161000 | sorts (disk)               |      0           |
+| 142 |     72863 | 202011161000 | user calls                 | 660519           |
+| 143 |     72864 | 202011161100 | CPU used by this session   |  43457           |
+| 144 |     72864 | 202011161100 | db block changes           |      4.47889e+07 |
+| 145 |     72864 | 202011161100 | execute count              | 526129           |
+| 146 |     72864 | 202011161100 | logons cumulative          |   1668           |
+| 147 |     72864 | 202011161100 | parse count (hard)         |   4874           |
+| 148 |     72864 | 202011161100 | parse count (total)        | 186711           |
+| 149 |     72864 | 202011161100 | parse time cpu             |   3629           |
+| 150 |     72864 | 202011161100 | physical read total bytes  |      1.72683e+11 |
+| 151 |     72864 | 202011161100 | physical write total bytes |      3.96236e+10 |
+| 152 |     72864 | 202011161100 | redo size                  |      9.11943e+09 |
+| 153 |     72864 | 202011161100 | session logical reads      |      1.13605e+08 |
+| 154 |     72864 | 202011161100 | sorts (disk)               |      0           |
+| 155 |     72864 | 202011161100 | user calls                 | 306484           |
+| 156 |     72865 | 202011161200 | CPU used by this session   |  93206           |
+| 157 |     72865 | 202011161200 | db block changes           |      1.98935e+07 |
+| 158 |     72865 | 202011161200 | execute count              | 409433           |
+| 159 |     72865 | 202011161200 | logons cumulative          |   1290           |
+| 160 |     72865 | 202011161200 | parse count (hard)         |   4417           |
+| 161 |     72865 | 202011161200 | parse count (total)        |  35918           |
+| 162 |     72865 | 202011161200 | parse time cpu             |   1119           |
+| 163 |     72865 | 202011161200 | physical read total bytes  |      1.61205e+12 |
+| 164 |     72865 | 202011161200 | physical write total bytes |      2.95536e+10 |
+| 165 |     72865 | 202011161200 | redo size                  |      5.81906e+09 |
+| 166 |     72865 | 202011161200 | session logical reads      |      2.47956e+08 |
+| 167 |     72865 | 202011161200 | sorts (disk)               |      0           |
+| 168 |     72865 | 202011161200 | user calls                 | 551386           |
+| 169 |     72866 | 202011161300 | CPU used by this session   |  39491           |
+| 170 |     72866 | 202011161300 | db block changes           |      2.32563e+07 |
+| 171 |     72866 | 202011161300 | execute count              |  56267           |
+| 172 |     72866 | 202011161300 | logons cumulative          |   1734           |
+| 173 |     72866 | 202011161300 | parse count (hard)         |   2368           |
+| 174 |     72866 | 202011161300 | parse count (total)        |  27902           |
+| 175 |     72866 | 202011161300 | parse time cpu             |   1322           |
+| 176 |     72866 | 202011161300 | physical read total bytes  |      5.61285e+11 |
+| 177 |     72866 | 202011161300 | physical write total bytes |      2.23814e+10 |
+| 178 |     72866 | 202011161300 | redo size                  |      4.90205e+09 |
+| 179 |     72866 | 202011161300 | session logical reads      |      1.19701e+08 |
+| 180 |     72866 | 202011161300 | sorts (disk)               |      0           |
+| 181 |     72866 | 202011161300 | user calls                 |  94428           |
+| 182 |     72867 | 202011161400 | CPU used by this session   | 100271           |
+| 183 |     72867 | 202011161400 | db block changes           |      2.76778e+06 |
+| 184 |     72867 | 202011161400 | execute count              | 384011           |
+| 185 |     72867 | 202011161400 | logons cumulative          |   1983           |
+| 186 |     72867 | 202011161400 | parse count (hard)         |   3535           |
+| 187 |     72867 | 202011161400 | parse count (total)        |  50538           |
+| 188 |     72867 | 202011161400 | parse time cpu             |   1790           |
+| 189 |     72867 | 202011161400 | physical read total bytes  |      1.63274e+12 |
+| 190 |     72867 | 202011161400 | physical write total bytes |      4.0207e+09  |
+| 191 |     72867 | 202011161400 | redo size                  |      6.50027e+08 |
+| 192 |     72867 | 202011161400 | session logical reads      |      2.27324e+08 |
+| 193 |     72867 | 202011161400 | sorts (disk)               |      0           |
+| 194 |     72867 | 202011161400 | user calls                 | 190846           |
+| 195 |     72868 | 202011161500 | CPU used by this session   |  48554           |
+| 196 |     72868 | 202011161500 | db block changes           |      3.02217e+06 |
+| 197 |     72868 | 202011161500 | execute count              | 393168           |
+| 198 |     72868 | 202011161500 | logons cumulative          |   2730           |
+| 199 |     72868 | 202011161500 | parse count (hard)         |   5432           |
+| 200 |     72868 | 202011161500 | parse count (total)        |  61546           |
+| 201 |     72868 | 202011161500 | parse time cpu             |   2748           |
+| 202 |     72868 | 202011161500 | physical read total bytes  |      2.49285e+11 |
+| 203 |     72868 | 202011161500 | physical write total bytes |      3.23647e+09 |
+| 204 |     72868 | 202011161500 | redo size                  |      6.5199e+08  |
+| 205 |     72868 | 202011161500 | session logical reads      |      1.06968e+08 |
+| 206 |     72868 | 202011161500 | sorts (disk)               |      0           |
+| 207 |     72868 | 202011161500 | user calls                 | 199750           |
+| 208 |     72869 | 202011161600 | CPU used by this session   |  95691           |
+| 209 |     72869 | 202011161600 | db block changes           |      2.17428e+06 |
+| 210 |     72869 | 202011161600 | execute count              | 407821           |
+| 211 |     72869 | 202011161600 | logons cumulative          |   2682           |
+| 212 |     72869 | 202011161600 | parse count (hard)         |   3339           |
+| 213 |     72869 | 202011161600 | parse count (total)        |  74865           |
+| 214 |     72869 | 202011161600 | parse time cpu             |   1542           |
+| 215 |     72869 | 202011161600 | physical read total bytes  |      1.34507e+12 |
+| 216 |     72869 | 202011161600 | physical write total bytes |      2.40713e+09 |
+| 217 |     72869 | 202011161600 | redo size                  |      4.89351e+08 |
+| 218 |     72869 | 202011161600 | session logical reads      |      2.45824e+08 |
+| 219 |     72869 | 202011161600 | sorts (disk)               |      0           |
+| 220 |     72869 | 202011161600 | user calls                 | 206637           |
+| 221 |     72870 | 202011161700 | CPU used by this session   |  55422           |
+| 222 |     72870 | 202011161700 | db block changes           |      5.45359e+06 |
+| 223 |     72870 | 202011161700 | execute count              | 436835           |
+| 224 |     72870 | 202011161700 | logons cumulative          |   2439           |
+| 225 |     72870 | 202011161700 | parse count (hard)         |   3024           |
+| 226 |     72870 | 202011161700 | parse count (total)        |  83373           |
+| 227 |     72870 | 202011161700 | parse time cpu             |    947           |
+| 228 |     72870 | 202011161700 | physical read total bytes  |      2.95805e+11 |
+| 229 |     72870 | 202011161700 | physical write total bytes |      6.47937e+09 |
+| 230 |     72870 | 202011161700 | redo size                  |      1.23399e+09 |
+| 231 |     72870 | 202011161700 | session logical reads      |      1.56409e+08 |
+| 232 |     72870 | 202011161700 | sorts (disk)               |      0           |
+| 233 |     72870 | 202011161700 | user calls                 | 275534           |
+| 234 |     72871 | 202011161800 | CPU used by this session   | 111628           |
+| 235 |     72871 | 202011161800 | db block changes           |      1.34818e+08 |
+| 236 |     72871 | 202011161800 | execute count              | 372776           |
+| 237 |     72871 | 202011161800 | logons cumulative          |   1238           |
+| 238 |     72871 | 202011161800 | parse count (hard)         |   2724           |
+| 239 |     72871 | 202011161800 | parse count (total)        |  46128           |
+| 240 |     72871 | 202011161800 | parse time cpu             |    494           |
+| 241 |     72871 | 202011161800 | physical read total bytes  |      1.60244e+12 |
+| 242 |     72871 | 202011161800 | physical write total bytes |      1.28126e+11 |
+| 243 |     72871 | 202011161800 | redo size                  |      2.34608e+10 |
+| 244 |     72871 | 202011161800 | session logical reads      |      3.91637e+08 |
+| 245 |     72871 | 202011161800 | sorts (disk)               |      0           |
+| 246 |     72871 | 202011161800 | user calls                 | 159205           |
+| 247 |     72872 | 202011161900 | CPU used by this session   |  84245           |
+| 248 |     72872 | 202011161900 | db block changes           |      1.99031e+07 |
+| 249 |     72872 | 202011161900 | execute count              | 298405           |
+| 250 |     72872 | 202011161900 | logons cumulative          |    760           |
+| 251 |     72872 | 202011161900 | parse count (hard)         |    526           |
+| 252 |     72872 | 202011161900 | parse count (total)        |  11822           |
+| 253 |     72872 | 202011161900 | parse time cpu             |    369           |
+| 254 |     72872 | 202011161900 | physical read total bytes  |      3.40436e+11 |
+| 255 |     72872 | 202011161900 | physical write total bytes |      6.3109e+10  |
+| 256 |     72872 | 202011161900 | redo size                  |      9.40606e+09 |
+| 257 |     72872 | 202011161900 | session logical reads      |      1.8175e+08  |
+| 258 |     72872 | 202011161900 | sorts (disk)               |      2           |
+| 259 |     72872 | 202011161900 | user calls                 |  31587           |
+| 260 |     72873 | 202011162000 | CPU used by this session   |  69747           |
+| 261 |     72873 | 202011162000 | db block changes           |      3.73937e+06 |
+| 262 |     72873 | 202011162000 | execute count              |  53803           |
+| 263 |     72873 | 202011162000 | logons cumulative          |    688           |
+| 264 |     72873 | 202011162000 | parse count (hard)         |   1285           |
+| 265 |     72873 | 202011162000 | parse count (total)        |  22094           |
+| 266 |     72873 | 202011162000 | parse time cpu             |    159           |
+| 267 |     72873 | 202011162000 | physical read total bytes  |      1.66093e+12 |
+| 268 |     72873 | 202011162000 | physical write total bytes |      4.18702e+09 |
+| 269 |     72873 | 202011162000 | redo size                  |      7.32881e+08 |
+| 270 |     72873 | 202011162000 | session logical reads      |      2.19723e+08 |
+| 271 |     72873 | 202011162000 | sorts (disk)               |      0           |
+| 272 |     72873 | 202011162000 | user calls                 |  88448           |
+| 273 |     72874 | 202011162100 | CPU used by this session   |  16746           |
+| 274 |     72874 | 202011162100 | db block changes           | 244686           |
+| 275 |     72874 | 202011162100 | execute count              |  80870           |
+| 276 |     72874 | 202011162100 | logons cumulative          |    590           |
+| 277 |     72874 | 202011162100 | parse count (hard)         |   1052           |
+| 278 |     72874 | 202011162100 | parse count (total)        |  11135           |
+| 279 |     72874 | 202011162100 | parse time cpu             |    670           |
+| 280 |     72874 | 202011162100 | physical read total bytes  |      4.86089e+11 |
+| 281 |     72874 | 202011162100 | physical write total bytes |      3.54996e+09 |
+| 282 |     72874 | 202011162100 | redo size                  |      4.78378e+07 |
+| 283 |     72874 | 202011162100 | session logical reads      |      2.53326e+07 |
+| 284 |     72874 | 202011162100 | sorts (disk)               |      0           |
+| 285 |     72874 | 202011162100 | user calls                 |  36550           |
+| 286 |     72875 | 202011162200 | CPU used by this session   | 113278           |
+| 287 |     72875 | 202011162200 | db block changes           |      1.92438e+06 |
+| 288 |     72875 | 202011162200 | execute count              | 131624           |
+| 289 |     72875 | 202011162200 | logons cumulative          |    461           |
+| 290 |     72875 | 202011162200 | parse count (hard)         |   3325           |
+| 291 |     72875 | 202011162200 | parse count (total)        |  41222           |
+| 292 |     72875 | 202011162200 | parse time cpu             |   9750           |
+| 293 |     72875 | 202011162200 | physical read total bytes  |      8.27759e+11 |
+| 294 |     72875 | 202011162200 | physical write total bytes |      8.84252e+09 |
+| 295 |     72875 | 202011162200 | redo size                  |      2.78572e+08 |
+| 296 |     72875 | 202011162200 | session logical reads      |      1.12285e+08 |
+| 297 |     72875 | 202011162200 | sorts (disk)               |      0           |
+| 298 |     72875 | 202011162200 | user calls                 |  82516           |
+| 299 |     72876 | 202011162300 | CPU used by this session   |  62396           |
+| 300 |     72876 | 202011162300 | db block changes           |      7.80951e+07 |
+| 301 |     72876 | 202011162300 | execute count              |      1.26541e+07 |
+| 302 |     72876 | 202011162300 | logons cumulative          |    483           |
+| 303 |     72876 | 202011162300 | parse count (hard)         |    776           |
+| 304 |     72876 | 202011162300 | parse count (total)        |  10044           |
+| 305 |     72876 | 202011162300 | parse time cpu             |    562           |
+| 306 |     72876 | 202011162300 | physical read total bytes  |      1.86412e+10 |
+| 307 |     72876 | 202011162300 | physical write total bytes |      5.94327e+10 |
+| 308 |     72876 | 202011162300 | redo size                  |      1.55209e+10 |
+| 309 |     72876 | 202011162300 | session logical reads      |      9.05046e+07 |
+| 310 |     72876 | 202011162300 | sorts (disk)               |      0           |
+| 311 |     72876 | 202011162300 | user calls                 |      1.237e+07   |
+| 312 |     72877 | 202011170000 | CPU used by this session   |  18307           |
+| 313 |     72877 | 202011170000 | db block changes           |      5.82434e+06 |
+| 314 |     72877 | 202011170000 | execute count              |      1.35064e+06 |
+| 315 |     72877 | 202011170000 | logons cumulative          |    499           |
+| 316 |     72877 | 202011170000 | parse count (hard)         |    814           |
+| 317 |     72877 | 202011170000 | parse count (total)        |   6383           |
+| 318 |     72877 | 202011170000 | parse time cpu             |   1257           |
+| 319 |     72877 | 202011170000 | physical read total bytes  |      3.49239e+10 |
+| 320 |     72877 | 202011170000 | physical write total bytes |      5.67745e+09 |
+| 321 |     72877 | 202011170000 | redo size                  |      1.35736e+09 |
+| 322 |     72877 | 202011170000 | session logical reads      |      1.23767e+07 |
+| 323 |     72877 | 202011170000 | sorts (disk)               |      0           |
+| 324 |     72877 | 202011170000 | user calls                 |      1.35402e+06 |
+| 325 |     72878 | 202011170100 | CPU used by this session   |   2526           |
+| 326 |     72878 | 202011170100 | db block changes           |  43057           |
+| 327 |     72878 | 202011170100 | execute count              | 281848           |
+| 328 |     72878 | 202011170100 | logons cumulative          |    308           |
+| 329 |     72878 | 202011170100 | parse count (hard)         |    173           |
+| 330 |     72878 | 202011170100 | parse count (total)        |   3210           |
+| 331 |     72878 | 202011170100 | parse time cpu             |     57           |
+| 332 |     72878 | 202011170100 | physical read total bytes  |      1.94643e+09 |
+| 333 |     72878 | 202011170100 | physical write total bytes |      1.34881e+08 |
+| 334 |     72878 | 202011170100 | redo size                  |      1.10117e+07 |
+| 335 |     72878 | 202011170100 | session logical reads      | 244324           |
+| 336 |     72878 | 202011170100 | sorts (disk)               |      0           |
+| 337 |     72878 | 202011170100 | user calls                 |   3446           |
+| 338 |     72879 | 202011170200 | CPU used by this session   |   1965           |
+| 339 |     72879 | 202011170200 | db block changes           | 226043           |
+| 340 |     72879 | 202011170200 | execute count              |  19713           |
+| 341 |     72879 | 202011170200 | logons cumulative          |    318           |
+| 342 |     72879 | 202011170200 | parse count (hard)         |    218           |
+| 343 |     72879 | 202011170200 | parse count (total)        |   3391           |
+| 344 |     72879 | 202011170200 | parse time cpu             |     55           |
+| 345 |     72879 | 202011170200 | physical read total bytes  |      2.25578e+09 |
+| 346 |     72879 | 202011170200 | physical write total bytes |      2.2549e+08  |
+| 347 |     72879 | 202011170200 | redo size                  |      4.77509e+07 |
+| 348 |     72879 | 202011170200 | session logical reads      |      1.24708e+06 |
+| 349 |     72879 | 202011170200 | sorts (disk)               |      0           |
+| 350 |     72879 | 202011170200 | user calls                 |  33863           |
+| 351 |     72880 | 202011170300 | CPU used by this session   |   1591           |
+| 352 |     72880 | 202011170300 | db block changes           |  42256           |
+| 353 |     72880 | 202011170300 | execute count              |   8244           |
+| 354 |     72880 | 202011170300 | logons cumulative          |    311           |
+| 355 |     72880 | 202011170300 | parse count (hard)         |     41           |
+| 356 |     72880 | 202011170300 | parse count (total)        |   2896           |
+| 357 |     72880 | 202011170300 | parse time cpu             |     19           |
+| 358 |     72880 | 202011170300 | physical read total bytes  |      1.22635e+09 |
+| 359 |     72880 | 202011170300 | physical write total bytes |      1.13683e+08 |
+| 360 |     72880 | 202011170300 | redo size                  |      1.21116e+07 |
+| 361 |     72880 | 202011170300 | session logical reads      | 395452           |
+| 362 |     72880 | 202011170300 | sorts (disk)               |      0           |
+| 363 |     72880 | 202011170300 | user calls                 |   4585           |
+| 364 |     72881 | 202011170400 | CPU used by this session   |   5210           |
+| 365 |     72881 | 202011170400 | db block changes           | 304504           |
+| 366 |     72881 | 202011170400 | execute count              |  34230           |
+| 367 |     72881 | 202011170400 | logons cumulative          |    417           |
+| 368 |     72881 | 202011170400 | parse count (hard)         |    131           |
+| 369 |     72881 | 202011170400 | parse count (total)        |  19230           |
+| 370 |     72881 | 202011170400 | parse time cpu             |    123           |
+| 371 |     72881 | 202011170400 | physical read total bytes  |      9.85714e+09 |
+| 372 |     72881 | 202011170400 | physical write total bytes |      3.02004e+08 |
+| 373 |     72881 | 202011170400 | redo size                  |      7.41403e+07 |
+| 374 |     72881 | 202011170400 | session logical reads      |      9.68185e+06 |
+| 375 |     72881 | 202011170400 | sorts (disk)               |      0           |
+| 376 |     72881 | 202011170400 | user calls                 |  38303           |
+| 377 |     72882 | 202011170500 | CPU used by this session   |  17119           |
+| 378 |     72882 | 202011170500 | db block changes           |      3.3613e+06  |
+| 379 |     72882 | 202011170500 | execute count              | 424191           |
+| 380 |     72882 | 202011170500 | logons cumulative          |    877           |
+| 381 |     72882 | 202011170500 | parse count (hard)         |    443           |
+| 382 |     72882 | 202011170500 | parse count (total)        |  76279           |
+| 383 |     72882 | 202011170500 | parse time cpu             |    255           |
+| 384 |     72882 | 202011170500 | physical read total bytes  |      1.5987e+11  |
+| 385 |     72882 | 202011170500 | physical write total bytes |      3.92162e+09 |
+| 386 |     72882 | 202011170500 | redo size                  |      8.18984e+08 |
+| 387 |     72882 | 202011170500 | session logical reads      |      5.10859e+07 |
+| 388 |     72882 | 202011170500 | sorts (disk)               |      0           |
+| 389 |     72882 | 202011170500 | user calls                 | 212803           |
+| 390 |     72883 | 202011170600 | CPU used by this session   |  39575           |
+| 391 |     72883 | 202011170600 | db block changes           |      1.63347e+07 |
+| 392 |     72883 | 202011170600 | execute count              |  35793           |
+| 393 |     72883 | 202011170600 | logons cumulative          |   1497           |
+| 394 |     72883 | 202011170600 | parse count (hard)         |   1419           |
+| 395 |     72883 | 202011170600 | parse count (total)        |  23623           |
+| 396 |     72883 | 202011170600 | parse time cpu             |    312           |
+| 397 |     72883 | 202011170600 | physical read total bytes  |      2.27253e+11 |
+| 398 |     72883 | 202011170600 | physical write total bytes |      1.62197e+10 |
+| 399 |     72883 | 202011170600 | redo size                  |      3.47698e+09 |
+| 400 |     72883 | 202011170600 | session logical reads      |      1.45914e+08 |
+| 401 |     72883 | 202011170600 | sorts (disk)               |      0           |
+| 402 |     72883 | 202011170600 | user calls                 |  83125           |
+| 403 |     72884 | 202011170700 | CPU used by this session   |  46842           |
+| 404 |     72884 | 202011170700 | db block changes           |      2.34425e+07 |
+| 405 |     72884 | 202011170700 | execute count              |  44353           |
+| 406 |     72884 | 202011170700 | logons cumulative          |   1686           |
+| 407 |     72884 | 202011170700 | parse count (hard)         |   1101           |
+| 408 |     72884 | 202011170700 | parse count (total)        |  24392           |
+| 409 |     72884 | 202011170700 | parse time cpu             |    319           |
+| 410 |     72884 | 202011170700 | physical read total bytes  |      1.93712e+11 |
+| 411 |     72884 | 202011170700 | physical write total bytes |      2.34744e+10 |
+| 412 |     72884 | 202011170700 | redo size                  |      5.05059e+09 |
+| 413 |     72884 | 202011170700 | session logical reads      |      1.58133e+08 |
+| 414 |     72884 | 202011170700 | sorts (disk)               |      0           |
+| 415 |     72884 | 202011170700 | user calls                 | 135286           |
+| 416 |     72885 | 202011170800 | CPU used by this session   |  79289           |
+| 417 |     72885 | 202011170800 | db block changes           |      2.12273e+07 |
+| 418 |     72885 | 202011170800 | execute count              | 873789           |
+| 419 |     72885 | 202011170800 | logons cumulative          |   2422           |
+| 420 |     72885 | 202011170800 | parse count (hard)         |  80857           |
+| 421 |     72885 | 202011170800 | parse count (total)        | 425491           |
+| 422 |     72885 | 202011170800 | parse time cpu             |   6684           |
+| 423 |     72885 | 202011170800 | physical read total bytes  |      1.2477e+12  |
+| 424 |     72885 | 202011170800 | physical write total bytes |      2.00067e+10 |
+| 425 |     72885 | 202011170800 | redo size                  |      4.78005e+09 |
+| 426 |     72885 | 202011170800 | session logical reads      |      2.17446e+08 |
+| 427 |     72885 | 202011170800 | sorts (disk)               |      0           |
+| 428 |     72885 | 202011170800 | user calls                 | 862390           |
+| 429 |     72886 | 202011170900 | CPU used by this session   |  93664           |
+| 430 |     72886 | 202011170900 | db block changes           |      2.80339e+07 |
+| 431 |     72886 | 202011170900 | execute count              |      1.0445e+06  |
+| 432 |     72886 | 202011170900 | logons cumulative          |   4089           |
+| 433 |     72886 | 202011170900 | parse count (hard)         |   4884           |
+| 434 |     72886 | 202011170900 | parse count (total)        | 585925           |
+| 435 |     72886 | 202011170900 | parse time cpu             |   5252           |
+| 436 |     72886 | 202011170900 | physical read total bytes  |      6.20551e+11 |
+| 437 |     72886 | 202011170900 | physical write total bytes |      2.72264e+10 |
+| 438 |     72886 | 202011170900 | redo size                  |      6.06513e+09 |
+| 439 |     72886 | 202011170900 | session logical reads      |      1.64582e+08 |
+| 440 |     72886 | 202011170900 | sorts (disk)               |      0           |
+| 441 |     72886 | 202011170900 | user calls                 | 851231           |
+| 442 |     72887 | 202011171000 | CPU used by this session   | 181172           |
+| 443 |     72887 | 202011171000 | db block changes           |      2.58814e+07 |
+| 444 |     72887 | 202011171000 | execute count              | 712762           |
+| 445 |     72887 | 202011171000 | logons cumulative          |   5269           |
+| 446 |     72887 | 202011171000 | parse count (hard)         |  58310           |
+| 447 |     72887 | 202011171000 | parse count (total)        | 274849           |
+| 448 |     72887 | 202011171000 | parse time cpu             |   6471           |
+| 449 |     72887 | 202011171000 | physical read total bytes  |      2.10065e+12 |
+| 450 |     72887 | 202011171000 | physical write total bytes |      2.93137e+10 |
+| 451 |     72887 | 202011171000 | redo size                  |      6.10661e+09 |
+| 452 |     72887 | 202011171000 | session logical reads      |      3.99452e+08 |
+| 453 |     72887 | 202011171000 | sorts (disk)               |      0           |
+| 454 |     72887 | 202011171000 | user calls                 | 742609           |
+| 455 |     72888 | 202011171100 | CPU used by this session   |  86533           |
+| 456 |     72888 | 202011171100 | db block changes           |      1.44214e+07 |
+| 457 |     72888 | 202011171100 | execute count              | 657001           |
+| 458 |     72888 | 202011171100 | logons cumulative          |   4075           |
+| 459 |     72888 | 202011171100 | parse count (hard)         |   9443           |
+| 460 |     72888 | 202011171100 | parse count (total)        | 292996           |
+| 461 |     72888 | 202011171100 | parse time cpu             |   5781           |
+| 462 |     72888 | 202011171100 | physical read total bytes  |      2.98738e+11 |
+| 463 |     72888 | 202011171100 | physical write total bytes |      2.21967e+10 |
+| 464 |     72888 | 202011171100 | redo size                  |      3.43492e+09 |
+| 465 |     72888 | 202011171100 | session logical reads      |      8.74782e+07 |
+| 466 |     72888 | 202011171100 | sorts (disk)               |      0           |
+| 467 |     72888 | 202011171100 | user calls                 | 529197           |
+| 468 |     72889 | 202011171200 | CPU used by this session   |  99606           |
+| 469 |     72889 | 202011171200 | db block changes           |      4.30522e+07 |
+| 470 |     72889 | 202011171200 | execute count              | 407842           |
+| 471 |     72889 | 202011171200 | logons cumulative          |   1607           |
+| 472 |     72889 | 202011171200 | parse count (hard)         |   2895           |
+| 473 |     72889 | 202011171200 | parse count (total)        |  34350           |
+| 474 |     72889 | 202011171200 | parse time cpu             |    871           |
+| 475 |     72889 | 202011171200 | physical read total bytes  |      1.31142e+12 |
+| 476 |     72889 | 202011171200 | physical write total bytes |      5.07588e+10 |
+| 477 |     72889 | 202011171200 | redo size                  |      1.06711e+10 |
+| 478 |     72889 | 202011171200 | session logical reads      |      2.62339e+08 |
+| 479 |     72889 | 202011171200 | sorts (disk)               |      0           |
+| 480 |     72889 | 202011171200 | user calls                 | 302188           |
+| 481 |     72890 | 202011171300 | CPU used by this session   |  18194           |
+| 482 |     72890 | 202011171300 | db block changes           |      9.12665e+06 |
+| 483 |     72890 | 202011171300 | execute count              | 128226           |
+| 484 |     72890 | 202011171300 | logons cumulative          |   1476           |
+| 485 |     72890 | 202011171300 | parse count (hard)         |   1701           |
+| 486 |     72890 | 202011171300 | parse count (total)        |  76323           |
+| 487 |     72890 | 202011171300 | parse time cpu             |   1091           |
+| 488 |     72890 | 202011171300 | physical read total bytes  |      2.12217e+11 |
+| 489 |     72890 | 202011171300 | physical write total bytes |      1.05784e+10 |
+| 490 |     72890 | 202011171300 | redo size                  |      2.16197e+09 |
+| 491 |     72890 | 202011171300 | session logical reads      |      4.4464e+07  |
+| 492 |     72890 | 202011171300 | sorts (disk)               |      0           |
+| 493 |     72890 | 202011171300 | user calls                 | 195730           |
+| 494 |     72891 | 202011171400 | CPU used by this session   |  77320           |
+| 495 |     72891 | 202011171400 | db block changes           |      1.97503e+07 |
+| 496 |     72891 | 202011171400 | execute count              | 383737           |
+| 497 |     72891 | 202011171400 | logons cumulative          |   3081           |
+| 498 |     72891 | 202011171400 | parse count (hard)         |   4374           |
+| 499 |     72891 | 202011171400 | parse count (total)        |  61387           |
+| 500 |     72891 | 202011171400 | parse time cpu             |   2123           |
+| 501 |     72891 | 202011171400 | physical read total bytes  |      1.21536e+12 |
+| 502 |     72891 | 202011171400 | physical write total bytes |      1.93602e+10 |
+| 503 |     72891 | 202011171400 | redo size                  |      4.292e+09   |
+| 504 |     72891 | 202011171400 | session logical reads      |      2.03635e+08 |
+| 505 |     72891 | 202011171400 | sorts (disk)               |      0           |
+| 506 |     72891 | 202011171400 | user calls                 | 184197           |
+| 507 |     72892 | 202011171500 | CPU used by this session   |  52314           |
+| 508 |     72892 | 202011171500 | db block changes           |      3.23296e+06 |
+| 509 |     72892 | 202011171500 | execute count              | 387990           |
+| 510 |     72892 | 202011171500 | logons cumulative          |   3328           |
+| 511 |     72892 | 202011171500 | parse count (hard)         |   5520           |
+| 512 |     72892 | 202011171500 | parse count (total)        |  67241           |
+| 513 |     72892 | 202011171500 | parse time cpu             |   3032           |
+| 514 |     72892 | 202011171500 | physical read total bytes  |      2.43233e+11 |
+| 515 |     72892 | 202011171500 | physical write total bytes |      4.36932e+09 |
+| 516 |     72892 | 202011171500 | redo size                  |      7.96598e+08 |
+| 517 |     72892 | 202011171500 | session logical reads      |      9.24902e+07 |
+| 518 |     72892 | 202011171500 | sorts (disk)               |      0           |
+| 519 |     72892 | 202011171500 | user calls                 | 175602           |
+| 520 |     72893 | 202011171600 | CPU used by this session   | 114166           |
+| 521 |     72893 | 202011171600 | db block changes           |      3.49146e+06 |
+| 522 |     72893 | 202011171600 | execute count              | 430566           |
+| 523 |     72893 | 202011171600 | logons cumulative          |   3081           |
+| 524 |     72893 | 202011171600 | parse count (hard)         |   4379           |
+| 525 |     72893 | 202011171600 | parse count (total)        |  93211           |
+| 526 |     72893 | 202011171600 | parse time cpu             |   1738           |
+| 527 |     72893 | 202011171600 | physical read total bytes  |      1.27134e+12 |
+| 528 |     72893 | 202011171600 | physical write total bytes |      3.96509e+09 |
+| 529 |     72893 | 202011171600 | redo size                  |      7.62929e+08 |
+| 530 |     72893 | 202011171600 | session logical reads      |      2.50119e+08 |
+| 531 |     72893 | 202011171600 | sorts (disk)               |      0           |
+| 532 |     72893 | 202011171600 | user calls                 | 247422           |
+| 533 |     72894 | 202011171700 | CPU used by this session   |  57783           |
+| 534 |     72894 | 202011171700 | db block changes           |      3.39809e+06 |
+| 535 |     72894 | 202011171700 | execute count              | 388533           |
+| 536 |     72894 | 202011171700 | logons cumulative          |   1783           |
+| 537 |     72894 | 202011171700 | parse count (hard)         |   2167           |
+| 538 |     72894 | 202011171700 | parse count (total)        |  67432           |
+| 539 |     72894 | 202011171700 | parse time cpu             |    955           |
+| 540 |     72894 | 202011171700 | physical read total bytes  |      2.73399e+11 |
+| 541 |     72894 | 202011171700 | physical write total bytes |      3.85674e+09 |
+| 542 |     72894 | 202011171700 | redo size                  |      7.59362e+08 |
+| 543 |     72894 | 202011171700 | session logical reads      |      8.70951e+07 |
+| 544 |     72894 | 202011171700 | sorts (disk)               |      0           |
+| 545 |     72894 | 202011171700 | user calls                 | 175813           |
+| 546 |     72895 | 202011171800 | CPU used by this session   | 130353           |
+| 547 |     72895 | 202011171800 | db block changes           |      1.34579e+08 |
+| 548 |     72895 | 202011171800 | execute count              | 359265           |
+| 549 |     72895 | 202011171800 | logons cumulative          |   1224           |
+| 550 |     72895 | 202011171800 | parse count (hard)         |   1799           |
+| 551 |     72895 | 202011171800 | parse count (total)        |  46857           |
+| 552 |     72895 | 202011171800 | parse time cpu             |    344           |
+| 553 |     72895 | 202011171800 | physical read total bytes  |      1.7081e+12  |
+| 554 |     72895 | 202011171800 | physical write total bytes |      1.25775e+11 |
+| 555 |     72895 | 202011171800 | redo size                  |      2.31576e+10 |
+| 556 |     72895 | 202011171800 | session logical reads      |      3.95184e+08 |
+| 557 |     72895 | 202011171800 | sorts (disk)               |      0           |
+| 558 |     72895 | 202011171800 | user calls                 | 130465           |
+| 559 |     72896 | 202011171900 | CPU used by this session   |  81905           |
+| 560 |     72896 | 202011171900 | db block changes           |      2.07023e+07 |
+| 561 |     72896 | 202011171900 | execute count              | 287289           |
+| 562 |     72896 | 202011171900 | logons cumulative          |    549           |
+| 563 |     72896 | 202011171900 | parse count (hard)         |    373           |
+| 564 |     72896 | 202011171900 | parse count (total)        |   7602           |
+| 565 |     72896 | 202011171900 | parse time cpu             |     75           |
+| 566 |     72896 | 202011171900 | physical read total bytes  |      2.42962e+11 |
+| 567 |     72896 | 202011171900 | physical write total bytes |      6.60151e+10 |
+| 568 |     72896 | 202011171900 | redo size                  |      9.61831e+09 |
+| 569 |     72896 | 202011171900 | session logical reads      |      1.45812e+08 |
+| 570 |     72896 | 202011171900 | sorts (disk)               |      0           |
+| 571 |     72896 | 202011171900 | user calls                 |  15564           |
+| 572 |     72897 | 202011172000 | CPU used by this session   |  84738           |
+| 573 |     72897 | 202011172000 | db block changes           |      1.77344e+06 |
+| 574 |     72897 | 202011172000 | execute count              |  37645           |
+| 575 |     72897 | 202011172000 | logons cumulative          |    620           |
+| 576 |     72897 | 202011172000 | parse count (hard)         |   1205           |
+| 577 |     72897 | 202011172000 | parse count (total)        |  14380           |
+| 578 |     72897 | 202011172000 | parse time cpu             |    153           |
+| 579 |     72897 | 202011172000 | physical read total bytes  |      1.62671e+12 |
+| 580 |     72897 | 202011172000 | physical write total bytes |      4.2513e+09  |
+| 581 |     72897 | 202011172000 | redo size                  |      6.46379e+08 |
+| 582 |     72897 | 202011172000 | session logical reads      |      2.25796e+08 |
+| 583 |     72897 | 202011172000 | sorts (disk)               |      2           |
+| 584 |     72897 | 202011172000 | user calls                 |  70419           |
+| 585 |     72898 | 202011172100 | CPU used by this session   |  24654           |
+| 586 |     72898 | 202011172100 | db block changes           | 344263           |
+| 587 |     72898 | 202011172100 | execute count              | 114106           |
+| 588 |     72898 | 202011172100 | logons cumulative          |    711           |
+| 589 |     72898 | 202011172100 | parse count (hard)         |   1166           |
+| 590 |     72898 | 202011172100 | parse count (total)        |  32649           |
+| 591 |     72898 | 202011172100 | parse time cpu             |    695           |
+| 592 |     72898 | 202011172100 | physical read total bytes  |      6.01038e+11 |
+| 593 |     72898 | 202011172100 | physical write total bytes |      2.94635e+09 |
+| 594 |     72898 | 202011172100 | redo size                  |      8.2928e+07  |
+| 595 |     72898 | 202011172100 | session logical reads      |      3.56925e+07 |
+| 596 |     72898 | 202011172100 | sorts (disk)               |      0           |
+| 597 |     72898 | 202011172100 | user calls                 |  73789           |
+| 598 |     72899 | 202011172200 | CPU used by this session   | 131923           |
+| 599 |     72899 | 202011172200 | db block changes           |      1.52393e+07 |
+| 600 |     72899 | 202011172200 | execute count              |      3.27788e+06 |
+| 601 |     72899 | 202011172200 | logons cumulative          |    414           |
+| 602 |     72899 | 202011172200 | parse count (hard)         |   8503           |
+| 603 |     72899 | 202011172200 | parse count (total)        |  25425           |
+| 604 |     72899 | 202011172200 | parse time cpu             |  25992           |
+| 605 |     72899 | 202011172200 | physical read total bytes  |      7.24731e+11 |
+| 606 |     72899 | 202011172200 | physical write total bytes |      2.0268e+10  |
+| 607 |     72899 | 202011172200 | redo size                  |      2.84179e+09 |
+| 608 |     72899 | 202011172200 | session logical reads      |      1.27101e+08 |
+| 609 |     72899 | 202011172200 | sorts (disk)               |      0           |
+| 610 |     72899 | 202011172200 | user calls                 |      3.20357e+06 |
++-----+-----------+--------------+----------------------------+------------------+
+ merged  
+
+['SNAP_ID', 'SNAP_TIME', 'STAT_NAME', 'VALUE']
++-----+-----------+--------------+----------------------------+------------------+
+|     |   SNAP_ID |    SNAP_TIME | STAT_NAME                  |            VALUE |
+|-----+-----------+--------------+----------------------------+------------------|
+|   0 |     72853 | 202011160000 | CPU used by this session   |    nan           |
+|   1 |     72853 | 202011160000 | db block changes           |    nan           |
+|   2 |     72853 | 202011160000 | execute count              |    nan           |
+|   3 |     72853 | 202011160000 | logons cumulative          |    nan           |
+|   4 |     72853 | 202011160000 | parse count (hard)         |    nan           |
+|   5 |     72853 | 202011160000 | parse count (total)        |    nan           |
+|   6 |     72853 | 202011160000 | parse time cpu             |    nan           |
+|   7 |     72853 | 202011160000 | physical read total bytes  |    nan           |
+|   8 |     72853 | 202011160000 | physical write total bytes |    nan           |
+|   9 |     72853 | 202011160000 | redo size                  |    nan           |
+|  10 |     72853 | 202011160000 | session logical reads      |    nan           |
+|  11 |     72853 | 202011160000 | sorts (disk)               |    nan           |
+|  12 |     72853 | 202011160000 | user calls                 |    nan           |
+|  13 |     72854 | 202011160100 | CPU used by this session   |   2633           |
+|  14 |     72854 | 202011160100 | db block changes           |  51848           |
+|  15 |     72854 | 202011160100 | execute count              | 280730           |
+|  16 |     72854 | 202011160100 | logons cumulative          |    309           |
+|  17 |     72854 | 202011160100 | parse count (hard)         |     70           |
+|  18 |     72854 | 202011160100 | parse count (total)        |   2937           |
+|  19 |     72854 | 202011160100 | parse time cpu             |     34           |
+|  20 |     72854 | 202011160100 | physical read total bytes  |      2.0447e+09  |
+|  21 |     72854 | 202011160100 | physical write total bytes |      2.61063e+08 |
+|  22 |     72854 | 202011160100 | redo size                  |      1.32136e+07 |
+|  23 |     72854 | 202011160100 | session logical reads      | 651293           |
+|  24 |     72854 | 202011160100 | sorts (disk)               |      0           |
+|  25 |     72854 | 202011160100 | user calls                 |   3865           |
+|  26 |     72855 | 202011160200 | CPU used by this session   |   1227           |
+|  27 |     72855 | 202011160200 | db block changes           |  40570           |
+|  28 |     72855 | 202011160200 | execute count              |   8540           |
+|  29 |     72855 | 202011160200 | logons cumulative          |    313           |
+|  30 |     72855 | 202011160200 | parse count (hard)         |    110           |
+|  31 |     72855 | 202011160200 | parse count (total)        |   2951           |
+|  32 |     72855 | 202011160200 | parse time cpu             |     14           |
+|  33 |     72855 | 202011160200 | physical read total bytes  |      1.21938e+09 |
+|  34 |     72855 | 202011160200 | physical write total bytes |      1.06547e+08 |
+|  35 |     72855 | 202011160200 | redo size                  |      1.09662e+07 |
+|  36 |     72855 | 202011160200 | session logical reads      | 530511           |
+|  37 |     72855 | 202011160200 | sorts (disk)               |      0           |
+|  38 |     72855 | 202011160200 | user calls                 |   4539           |
+|  39 |     72856 | 202011160300 | CPU used by this session   |   1205           |
+|  40 |     72856 | 202011160300 | db block changes           |  31928           |
+|  41 |     72856 | 202011160300 | execute count              |   6787           |
+|  42 |     72856 | 202011160300 | logons cumulative          |    310           |
+|  43 |     72856 | 202011160300 | parse count (hard)         |      5           |
+|  44 |     72856 | 202011160300 | parse count (total)        |   2481           |
+|  45 |     72856 | 202011160300 | parse time cpu             |     12           |
+|  46 |     72856 | 202011160300 | physical read total bytes  |      1.21987e+09 |
+|  47 |     72856 | 202011160300 | physical write total bytes |      1.03568e+08 |
+|  48 |     72856 | 202011160300 | redo size                  |      9.8022e+06  |
+|  49 |     72856 | 202011160300 | session logical reads      | 491386           |
+|  50 |     72856 | 202011160300 | sorts (disk)               |      0           |
+|  51 |     72856 | 202011160300 | user calls                 |   4049           |
+|  52 |     72857 | 202011160400 | CPU used by this session   |   4845           |
+|  53 |     72857 | 202011160400 | db block changes           | 390126           |
+|  54 |     72857 | 202011160400 | execute count              |  39027           |
+|  55 |     72857 | 202011160400 | logons cumulative          |    439           |
+|  56 |     72857 | 202011160400 | parse count (hard)         |    102           |
+|  57 |     72857 | 202011160400 | parse count (total)        |  23230           |
+|  58 |     72857 | 202011160400 | parse time cpu             |     61           |
+|  59 |     72857 | 202011160400 | physical read total bytes  |      4.84526e+10 |
+|  60 |     72857 | 202011160400 | physical write total bytes |      3.68706e+08 |
+|  61 |     72857 | 202011160400 | redo size                  |      9.44941e+07 |
+|  62 |     72857 | 202011160400 | session logical reads      |      1.09455e+07 |
+|  63 |     72857 | 202011160400 | sorts (disk)               |      0           |
+|  64 |     72857 | 202011160400 | user calls                 |  45157           |
+|  65 |     72858 | 202011160500 | CPU used by this session   |  28978           |
+|  66 |     72858 | 202011160500 | db block changes           |      1.36411e+07 |
+|  67 |     72858 | 202011160500 | execute count              | 454771           |
+|  68 |     72858 | 202011160500 | logons cumulative          |   1117           |
+|  69 |     72858 | 202011160500 | parse count (hard)         |   1292           |
+|  70 |     72858 | 202011160500 | parse count (total)        |  86158           |
+|  71 |     72858 | 202011160500 | parse time cpu             |    382           |
+|  72 |     72858 | 202011160500 | physical read total bytes  |      1.87486e+11 |
+|  73 |     72858 | 202011160500 | physical write total bytes |      1.8339e+10  |
+|  74 |     72858 | 202011160500 | redo size                  |      3.30699e+09 |
+|  75 |     72858 | 202011160500 | session logical reads      |      8.95939e+07 |
+|  76 |     72858 | 202011160500 | sorts (disk)               |      0           |
+|  77 |     72858 | 202011160500 | user calls                 | 255206           |
+|  78 |     72859 | 202011160600 | CPU used by this session   |  46989           |
+|  79 |     72859 | 202011160600 | db block changes           |      2.21189e+07 |
+|  80 |     72859 | 202011160600 | execute count              | 740990           |
+|  81 |     72859 | 202011160600 | logons cumulative          |   1507           |
+|  82 |     72859 | 202011160600 | parse count (hard)         |   1645           |
+|  83 |     72859 | 202011160600 | parse count (total)        | 530794           |
+|  84 |     72859 | 202011160600 | parse time cpu             |    901           |
+|  85 |     72859 | 202011160600 | physical read total bytes  |      3.07303e+11 |
+|  86 |     72859 | 202011160600 | physical write total bytes |      2.25244e+10 |
+|  87 |     72859 | 202011160600 | redo size                  |      5.36146e+09 |
+|  88 |     72859 | 202011160600 | session logical reads      |      1.59649e+08 |
+|  89 |     72859 | 202011160600 | sorts (disk)               |      0           |
+|  90 |     72859 | 202011160600 | user calls                 | 843989           |
+|  91 |     72860 | 202011160700 | CPU used by this session   |  38654           |
+|  92 |     72860 | 202011160700 | db block changes           |      9.44365e+06 |
+|  93 |     72860 | 202011160700 | execute count              | 294710           |
+|  94 |     72860 | 202011160700 | logons cumulative          |   1850           |
+|  95 |     72860 | 202011160700 | parse count (hard)         |   1456           |
+|  96 |     72860 | 202011160700 | parse count (total)        | 183164           |
+|  97 |     72860 | 202011160700 | parse time cpu             |    698           |
+|  98 |     72860 | 202011160700 | physical read total bytes  |      2.3987e+11  |
+|  99 |     72860 | 202011160700 | physical write total bytes |      1.14206e+10 |
+| 100 |     72860 | 202011160700 | redo size                  |      2.40007e+09 |
+| 101 |     72860 | 202011160700 | session logical reads      |      1.24164e+08 |
+| 102 |     72860 | 202011160700 | sorts (disk)               |      0           |
+| 103 |     72860 | 202011160700 | user calls                 | 392990           |
+| 104 |     72861 | 202011160800 | CPU used by this session   |  47532           |
+| 105 |     72861 | 202011160800 | db block changes           |      5.5065e+06  |
+| 106 |     72861 | 202011160800 | execute count              | 408845           |
+| 107 |     72861 | 202011160800 | logons cumulative          |   1714           |
+| 108 |     72861 | 202011160800 | parse count (hard)         |   2337           |
+| 109 |     72861 | 202011160800 | parse count (total)        |  83477           |
+| 110 |     72861 | 202011160800 | parse time cpu             |   1236           |
+| 111 |     72861 | 202011160800 | physical read total bytes  |      6.49714e+11 |
+| 112 |     72861 | 202011160800 | physical write total bytes |      5.61924e+09 |
+| 113 |     72861 | 202011160800 | redo size                  |      1.19375e+09 |
+| 114 |     72861 | 202011160800 | session logical reads      |      1.39231e+08 |
+| 115 |     72861 | 202011160800 | sorts (disk)               |      0           |
+| 116 |     72861 | 202011160800 | user calls                 | 181774           |
+| 117 |     72862 | 202011160900 | CPU used by this session   |  66757           |
+| 118 |     72862 | 202011160900 | db block changes           |      4.59433e+07 |
+| 119 |     72862 | 202011160900 | execute count              | 407767           |
+| 120 |     72862 | 202011160900 | logons cumulative          |   1958           |
+| 121 |     72862 | 202011160900 | parse count (hard)         |  26550           |
+| 122 |     72862 | 202011160900 | parse count (total)        |  72610           |
+| 123 |     72862 | 202011160900 | parse time cpu             |   4220           |
+| 124 |     72862 | 202011160900 | physical read total bytes  |      2.7132e+11  |
+| 125 |     72862 | 202011160900 | physical write total bytes |      4.52812e+10 |
+| 126 |     72862 | 202011160900 | redo size                  |      9.88165e+09 |
+| 127 |     72862 | 202011160900 | session logical reads      |      1.31954e+08 |
+| 128 |     72862 | 202011160900 | sorts (disk)               |      0           |
+| 129 |     72862 | 202011160900 | user calls                 | 226795           |
+| 130 |     72863 | 202011161000 | CPU used by this session   | 165875           |
+| 131 |     72863 | 202011161000 | db block changes           |      2.4276e+07  |
+| 132 |     72863 | 202011161000 | execute count              | 670870           |
+| 133 |     72863 | 202011161000 | logons cumulative          |   2646           |
+| 134 |     72863 | 202011161000 | parse count (hard)         |  81688           |
+| 135 |     72863 | 202011161000 | parse count (total)        | 222044           |
+| 136 |     72863 | 202011161000 | parse time cpu             |   6886           |
+| 137 |     72863 | 202011161000 | physical read total bytes  |      2.21732e+12 |
+| 138 |     72863 | 202011161000 | physical write total bytes |      2.46086e+10 |
+| 139 |     72863 | 202011161000 | redo size                  |      5.35298e+09 |
+| 140 |     72863 | 202011161000 | session logical reads      |      3.96594e+08 |
+| 141 |     72863 | 202011161000 | sorts (disk)               |      0           |
+| 142 |     72863 | 202011161000 | user calls                 | 660519           |
+| 143 |     72864 | 202011161100 | CPU used by this session   |  43457           |
+| 144 |     72864 | 202011161100 | db block changes           |      4.47889e+07 |
+| 145 |     72864 | 202011161100 | execute count              | 526129           |
+| 146 |     72864 | 202011161100 | logons cumulative          |   1668           |
+| 147 |     72864 | 202011161100 | parse count (hard)         |   4874           |
+| 148 |     72864 | 202011161100 | parse count (total)        | 186711           |
+| 149 |     72864 | 202011161100 | parse time cpu             |   3629           |
+| 150 |     72864 | 202011161100 | physical read total bytes  |      1.72683e+11 |
+| 151 |     72864 | 202011161100 | physical write total bytes |      3.96236e+10 |
+| 152 |     72864 | 202011161100 | redo size                  |      9.11943e+09 |
+| 153 |     72864 | 202011161100 | session logical reads      |      1.13605e+08 |
+| 154 |     72864 | 202011161100 | sorts (disk)               |      0           |
+| 155 |     72864 | 202011161100 | user calls                 | 306484           |
+| 156 |     72865 | 202011161200 | CPU used by this session   |  93206           |
+| 157 |     72865 | 202011161200 | db block changes           |      1.98935e+07 |
+| 158 |     72865 | 202011161200 | execute count              | 409433           |
+| 159 |     72865 | 202011161200 | logons cumulative          |   1290           |
+| 160 |     72865 | 202011161200 | parse count (hard)         |   4417           |
+| 161 |     72865 | 202011161200 | parse count (total)        |  35918           |
+| 162 |     72865 | 202011161200 | parse time cpu             |   1119           |
+| 163 |     72865 | 202011161200 | physical read total bytes  |      1.61205e+12 |
+| 164 |     72865 | 202011161200 | physical write total bytes |      2.95536e+10 |
+| 165 |     72865 | 202011161200 | redo size                  |      5.81906e+09 |
+| 166 |     72865 | 202011161200 | session logical reads      |      2.47956e+08 |
+| 167 |     72865 | 202011161200 | sorts (disk)               |      0           |
+| 168 |     72865 | 202011161200 | user calls                 | 551386           |
+| 169 |     72866 | 202011161300 | CPU used by this session   |  39491           |
+| 170 |     72866 | 202011161300 | db block changes           |      2.32563e+07 |
+| 171 |     72866 | 202011161300 | execute count              |  56267           |
+| 172 |     72866 | 202011161300 | logons cumulative          |   1734           |
+| 173 |     72866 | 202011161300 | parse count (hard)         |   2368           |
+| 174 |     72866 | 202011161300 | parse count (total)        |  27902           |
+| 175 |     72866 | 202011161300 | parse time cpu             |   1322           |
+| 176 |     72866 | 202011161300 | physical read total bytes  |      5.61285e+11 |
+| 177 |     72866 | 202011161300 | physical write total bytes |      2.23814e+10 |
+| 178 |     72866 | 202011161300 | redo size                  |      4.90205e+09 |
+| 179 |     72866 | 202011161300 | session logical reads      |      1.19701e+08 |
+| 180 |     72866 | 202011161300 | sorts (disk)               |      0           |
+| 181 |     72866 | 202011161300 | user calls                 |  94428           |
+| 182 |     72867 | 202011161400 | CPU used by this session   | 100271           |
+| 183 |     72867 | 202011161400 | db block changes           |      2.76778e+06 |
+| 184 |     72867 | 202011161400 | execute count              | 384011           |
+| 185 |     72867 | 202011161400 | logons cumulative          |   1983           |
+| 186 |     72867 | 202011161400 | parse count (hard)         |   3535           |
+| 187 |     72867 | 202011161400 | parse count (total)        |  50538           |
+| 188 |     72867 | 202011161400 | parse time cpu             |   1790           |
+| 189 |     72867 | 202011161400 | physical read total bytes  |      1.63274e+12 |
+| 190 |     72867 | 202011161400 | physical write total bytes |      4.0207e+09  |
+| 191 |     72867 | 202011161400 | redo size                  |      6.50027e+08 |
+| 192 |     72867 | 202011161400 | session logical reads      |      2.27324e+08 |
+| 193 |     72867 | 202011161400 | sorts (disk)               |      0           |
+| 194 |     72867 | 202011161400 | user calls                 | 190846           |
+| 195 |     72868 | 202011161500 | CPU used by this session   |  48554           |
+| 196 |     72868 | 202011161500 | db block changes           |      3.02217e+06 |
+| 197 |     72868 | 202011161500 | execute count              | 393168           |
+| 198 |     72868 | 202011161500 | logons cumulative          |   2730           |
+| 199 |     72868 | 202011161500 | parse count (hard)         |   5432           |
+| 200 |     72868 | 202011161500 | parse count (total)        |  61546           |
+| 201 |     72868 | 202011161500 | parse time cpu             |   2748           |
+| 202 |     72868 | 202011161500 | physical read total bytes  |      2.49285e+11 |
+| 203 |     72868 | 202011161500 | physical write total bytes |      3.23647e+09 |
+| 204 |     72868 | 202011161500 | redo size                  |      6.5199e+08  |
+| 205 |     72868 | 202011161500 | session logical reads      |      1.06968e+08 |
+| 206 |     72868 | 202011161500 | sorts (disk)               |      0           |
+| 207 |     72868 | 202011161500 | user calls                 | 199750           |
+| 208 |     72869 | 202011161600 | CPU used by this session   |  95691           |
+| 209 |     72869 | 202011161600 | db block changes           |      2.17428e+06 |
+| 210 |     72869 | 202011161600 | execute count              | 407821           |
+| 211 |     72869 | 202011161600 | logons cumulative          |   2682           |
+| 212 |     72869 | 202011161600 | parse count (hard)         |   3339           |
+| 213 |     72869 | 202011161600 | parse count (total)        |  74865           |
+| 214 |     72869 | 202011161600 | parse time cpu             |   1542           |
+| 215 |     72869 | 202011161600 | physical read total bytes  |      1.34507e+12 |
+| 216 |     72869 | 202011161600 | physical write total bytes |      2.40713e+09 |
+| 217 |     72869 | 202011161600 | redo size                  |      4.89351e+08 |
+| 218 |     72869 | 202011161600 | session logical reads      |      2.45824e+08 |
+| 219 |     72869 | 202011161600 | sorts (disk)               |      0           |
+| 220 |     72869 | 202011161600 | user calls                 | 206637           |
+| 221 |     72870 | 202011161700 | CPU used by this session   |  55422           |
+| 222 |     72870 | 202011161700 | db block changes           |      5.45359e+06 |
+| 223 |     72870 | 202011161700 | execute count              | 436835           |
+| 224 |     72870 | 202011161700 | logons cumulative          |   2439           |
+| 225 |     72870 | 202011161700 | parse count (hard)         |   3024           |
+| 226 |     72870 | 202011161700 | parse count (total)        |  83373           |
+| 227 |     72870 | 202011161700 | parse time cpu             |    947           |
+| 228 |     72870 | 202011161700 | physical read total bytes  |      2.95805e+11 |
+| 229 |     72870 | 202011161700 | physical write total bytes |      6.47937e+09 |
+| 230 |     72870 | 202011161700 | redo size                  |      1.23399e+09 |
+| 231 |     72870 | 202011161700 | session logical reads      |      1.56409e+08 |
+| 232 |     72870 | 202011161700 | sorts (disk)               |      0           |
+| 233 |     72870 | 202011161700 | user calls                 | 275534           |
+| 234 |     72871 | 202011161800 | CPU used by this session   | 111628           |
+| 235 |     72871 | 202011161800 | db block changes           |      1.34818e+08 |
+| 236 |     72871 | 202011161800 | execute count              | 372776           |
+| 237 |     72871 | 202011161800 | logons cumulative          |   1238           |
+| 238 |     72871 | 202011161800 | parse count (hard)         |   2724           |
+| 239 |     72871 | 202011161800 | parse count (total)        |  46128           |
+| 240 |     72871 | 202011161800 | parse time cpu             |    494           |
+| 241 |     72871 | 202011161800 | physical read total bytes  |      1.60244e+12 |
+| 242 |     72871 | 202011161800 | physical write total bytes |      1.28126e+11 |
+| 243 |     72871 | 202011161800 | redo size                  |      2.34608e+10 |
+| 244 |     72871 | 202011161800 | session logical reads      |      3.91637e+08 |
+| 245 |     72871 | 202011161800 | sorts (disk)               |      0           |
+| 246 |     72871 | 202011161800 | user calls                 | 159205           |
+| 247 |     72872 | 202011161900 | CPU used by this session   |  84245           |
+| 248 |     72872 | 202011161900 | db block changes           |      1.99031e+07 |
+| 249 |     72872 | 202011161900 | execute count              | 298405           |
+| 250 |     72872 | 202011161900 | logons cumulative          |    760           |
+| 251 |     72872 | 202011161900 | parse count (hard)         |    526           |
+| 252 |     72872 | 202011161900 | parse count (total)        |  11822           |
+| 253 |     72872 | 202011161900 | parse time cpu             |    369           |
+| 254 |     72872 | 202011161900 | physical read total bytes  |      3.40436e+11 |
+| 255 |     72872 | 202011161900 | physical write total bytes |      6.3109e+10  |
+| 256 |     72872 | 202011161900 | redo size                  |      9.40606e+09 |
+| 257 |     72872 | 202011161900 | session logical reads      |      1.8175e+08  |
+| 258 |     72872 | 202011161900 | sorts (disk)               |      2           |
+| 259 |     72872 | 202011161900 | user calls                 |  31587           |
+| 260 |     72873 | 202011162000 | CPU used by this session   |  69747           |
+| 261 |     72873 | 202011162000 | db block changes           |      3.73937e+06 |
+| 262 |     72873 | 202011162000 | execute count              |  53803           |
+| 263 |     72873 | 202011162000 | logons cumulative          |    688           |
+| 264 |     72873 | 202011162000 | parse count (hard)         |   1285           |
+| 265 |     72873 | 202011162000 | parse count (total)        |  22094           |
+| 266 |     72873 | 202011162000 | parse time cpu             |    159           |
+| 267 |     72873 | 202011162000 | physical read total bytes  |      1.66093e+12 |
+| 268 |     72873 | 202011162000 | physical write total bytes |      4.18702e+09 |
+| 269 |     72873 | 202011162000 | redo size                  |      7.32881e+08 |
+| 270 |     72873 | 202011162000 | session logical reads      |      2.19723e+08 |
+| 271 |     72873 | 202011162000 | sorts (disk)               |      0           |
+| 272 |     72873 | 202011162000 | user calls                 |  88448           |
+| 273 |     72874 | 202011162100 | CPU used by this session   |  16746           |
+| 274 |     72874 | 202011162100 | db block changes           | 244686           |
+| 275 |     72874 | 202011162100 | execute count              |  80870           |
+| 276 |     72874 | 202011162100 | logons cumulative          |    590           |
+| 277 |     72874 | 202011162100 | parse count (hard)         |   1052           |
+| 278 |     72874 | 202011162100 | parse count (total)        |  11135           |
+| 279 |     72874 | 202011162100 | parse time cpu             |    670           |
+| 280 |     72874 | 202011162100 | physical read total bytes  |      4.86089e+11 |
+| 281 |     72874 | 202011162100 | physical write total bytes |      3.54996e+09 |
+| 282 |     72874 | 202011162100 | redo size                  |      4.78378e+07 |
+| 283 |     72874 | 202011162100 | session logical reads      |      2.53326e+07 |
+| 284 |     72874 | 202011162100 | sorts (disk)               |      0           |
+| 285 |     72874 | 202011162100 | user calls                 |  36550           |
+| 286 |     72875 | 202011162200 | CPU used by this session   | 113278           |
+| 287 |     72875 | 202011162200 | db block changes           |      1.92438e+06 |
+| 288 |     72875 | 202011162200 | execute count              | 131624           |
+| 289 |     72875 | 202011162200 | logons cumulative          |    461           |
+| 290 |     72875 | 202011162200 | parse count (hard)         |   3325           |
+| 291 |     72875 | 202011162200 | parse count (total)        |  41222           |
+| 292 |     72875 | 202011162200 | parse time cpu             |   9750           |
+| 293 |     72875 | 202011162200 | physical read total bytes  |      8.27759e+11 |
+| 294 |     72875 | 202011162200 | physical write total bytes |      8.84252e+09 |
+| 295 |     72875 | 202011162200 | redo size                  |      2.78572e+08 |
+| 296 |     72875 | 202011162200 | session logical reads      |      1.12285e+08 |
+| 297 |     72875 | 202011162200 | sorts (disk)               |      0           |
+| 298 |     72875 | 202011162200 | user calls                 |  82516           |
+| 299 |     72876 | 202011162300 | CPU used by this session   |  62396           |
+| 300 |     72876 | 202011162300 | db block changes           |      7.80951e+07 |
+| 301 |     72876 | 202011162300 | execute count              |      1.26541e+07 |
+| 302 |     72876 | 202011162300 | logons cumulative          |    483           |
+| 303 |     72876 | 202011162300 | parse count (hard)         |    776           |
+| 304 |     72876 | 202011162300 | parse count (total)        |  10044           |
+| 305 |     72876 | 202011162300 | parse time cpu             |    562           |
+| 306 |     72876 | 202011162300 | physical read total bytes  |      1.86412e+10 |
+| 307 |     72876 | 202011162300 | physical write total bytes |      5.94327e+10 |
+| 308 |     72876 | 202011162300 | redo size                  |      1.55209e+10 |
+| 309 |     72876 | 202011162300 | session logical reads      |      9.05046e+07 |
+| 310 |     72876 | 202011162300 | sorts (disk)               |      0           |
+| 311 |     72876 | 202011162300 | user calls                 |      1.237e+07   |
+| 312 |     72877 | 202011170000 | CPU used by this session   |  18307           |
+| 313 |     72877 | 202011170000 | db block changes           |      5.82434e+06 |
+| 314 |     72877 | 202011170000 | execute count              |      1.35064e+06 |
+| 315 |     72877 | 202011170000 | logons cumulative          |    499           |
+| 316 |     72877 | 202011170000 | parse count (hard)         |    814           |
+| 317 |     72877 | 202011170000 | parse count (total)        |   6383           |
+| 318 |     72877 | 202011170000 | parse time cpu             |   1257           |
+| 319 |     72877 | 202011170000 | physical read total bytes  |      3.49239e+10 |
+| 320 |     72877 | 202011170000 | physical write total bytes |      5.67745e+09 |
+| 321 |     72877 | 202011170000 | redo size                  |      1.35736e+09 |
+| 322 |     72877 | 202011170000 | session logical reads      |      1.23767e+07 |
+| 323 |     72877 | 202011170000 | sorts (disk)               |      0           |
+| 324 |     72877 | 202011170000 | user calls                 |      1.35402e+06 |
+| 325 |     72878 | 202011170100 | CPU used by this session   |   2526           |
+| 326 |     72878 | 202011170100 | db block changes           |  43057           |
+| 327 |     72878 | 202011170100 | execute count              | 281848           |
+| 328 |     72878 | 202011170100 | logons cumulative          |    308           |
+| 329 |     72878 | 202011170100 | parse count (hard)         |    173           |
+| 330 |     72878 | 202011170100 | parse count (total)        |   3210           |
+| 331 |     72878 | 202011170100 | parse time cpu             |     57           |
+| 332 |     72878 | 202011170100 | physical read total bytes  |      1.94643e+09 |
+| 333 |     72878 | 202011170100 | physical write total bytes |      1.34881e+08 |
+| 334 |     72878 | 202011170100 | redo size                  |      1.10117e+07 |
+| 335 |     72878 | 202011170100 | session logical reads      | 244324           |
+| 336 |     72878 | 202011170100 | sorts (disk)               |      0           |
+| 337 |     72878 | 202011170100 | user calls                 |   3446           |
+| 338 |     72879 | 202011170200 | CPU used by this session   |   1965           |
+| 339 |     72879 | 202011170200 | db block changes           | 226043           |
+| 340 |     72879 | 202011170200 | execute count              |  19713           |
+| 341 |     72879 | 202011170200 | logons cumulative          |    318           |
+| 342 |     72879 | 202011170200 | parse count (hard)         |    218           |
+| 343 |     72879 | 202011170200 | parse count (total)        |   3391           |
+| 344 |     72879 | 202011170200 | parse time cpu             |     55           |
+| 345 |     72879 | 202011170200 | physical read total bytes  |      2.25578e+09 |
+| 346 |     72879 | 202011170200 | physical write total bytes |      2.2549e+08  |
+| 347 |     72879 | 202011170200 | redo size                  |      4.77509e+07 |
+| 348 |     72879 | 202011170200 | session logical reads      |      1.24708e+06 |
+| 349 |     72879 | 202011170200 | sorts (disk)               |      0           |
+| 350 |     72879 | 202011170200 | user calls                 |  33863           |
+| 351 |     72880 | 202011170300 | CPU used by this session   |   1591           |
+| 352 |     72880 | 202011170300 | db block changes           |  42256           |
+| 353 |     72880 | 202011170300 | execute count              |   8244           |
+| 354 |     72880 | 202011170300 | logons cumulative          |    311           |
+| 355 |     72880 | 202011170300 | parse count (hard)         |     41           |
+| 356 |     72880 | 202011170300 | parse count (total)        |   2896           |
+| 357 |     72880 | 202011170300 | parse time cpu             |     19           |
+| 358 |     72880 | 202011170300 | physical read total bytes  |      1.22635e+09 |
+| 359 |     72880 | 202011170300 | physical write total bytes |      1.13683e+08 |
+| 360 |     72880 | 202011170300 | redo size                  |      1.21116e+07 |
+| 361 |     72880 | 202011170300 | session logical reads      | 395452           |
+| 362 |     72880 | 202011170300 | sorts (disk)               |      0           |
+| 363 |     72880 | 202011170300 | user calls                 |   4585           |
+| 364 |     72881 | 202011170400 | CPU used by this session   |   5210           |
+| 365 |     72881 | 202011170400 | db block changes           | 304504           |
+| 366 |     72881 | 202011170400 | execute count              |  34230           |
+| 367 |     72881 | 202011170400 | logons cumulative          |    417           |
+| 368 |     72881 | 202011170400 | parse count (hard)         |    131           |
+| 369 |     72881 | 202011170400 | parse count (total)        |  19230           |
+| 370 |     72881 | 202011170400 | parse time cpu             |    123           |
+| 371 |     72881 | 202011170400 | physical read total bytes  |      9.85714e+09 |
+| 372 |     72881 | 202011170400 | physical write total bytes |      3.02004e+08 |
+| 373 |     72881 | 202011170400 | redo size                  |      7.41403e+07 |
+| 374 |     72881 | 202011170400 | session logical reads      |      9.68185e+06 |
+| 375 |     72881 | 202011170400 | sorts (disk)               |      0           |
+| 376 |     72881 | 202011170400 | user calls                 |  38303           |
+| 377 |     72882 | 202011170500 | CPU used by this session   |  17119           |
+| 378 |     72882 | 202011170500 | db block changes           |      3.3613e+06  |
+| 379 |     72882 | 202011170500 | execute count              | 424191           |
+| 380 |     72882 | 202011170500 | logons cumulative          |    877           |
+| 381 |     72882 | 202011170500 | parse count (hard)         |    443           |
+| 382 |     72882 | 202011170500 | parse count (total)        |  76279           |
+| 383 |     72882 | 202011170500 | parse time cpu             |    255           |
+| 384 |     72882 | 202011170500 | physical read total bytes  |      1.5987e+11  |
+| 385 |     72882 | 202011170500 | physical write total bytes |      3.92162e+09 |
+| 386 |     72882 | 202011170500 | redo size                  |      8.18984e+08 |
+| 387 |     72882 | 202011170500 | session logical reads      |      5.10859e+07 |
+| 388 |     72882 | 202011170500 | sorts (disk)               |      0           |
+| 389 |     72882 | 202011170500 | user calls                 | 212803           |
+| 390 |     72883 | 202011170600 | CPU used by this session   |  39575           |
+| 391 |     72883 | 202011170600 | db block changes           |      1.63347e+07 |
+| 392 |     72883 | 202011170600 | execute count              |  35793           |
+| 393 |     72883 | 202011170600 | logons cumulative          |   1497           |
+| 394 |     72883 | 202011170600 | parse count (hard)         |   1419           |
+| 395 |     72883 | 202011170600 | parse count (total)        |  23623           |
+| 396 |     72883 | 202011170600 | parse time cpu             |    312           |
+| 397 |     72883 | 202011170600 | physical read total bytes  |      2.27253e+11 |
+| 398 |     72883 | 202011170600 | physical write total bytes |      1.62197e+10 |
+| 399 |     72883 | 202011170600 | redo size                  |      3.47698e+09 |
+| 400 |     72883 | 202011170600 | session logical reads      |      1.45914e+08 |
+| 401 |     72883 | 202011170600 | sorts (disk)               |      0           |
+| 402 |     72883 | 202011170600 | user calls                 |  83125           |
+| 403 |     72884 | 202011170700 | CPU used by this session   |  46842           |
+| 404 |     72884 | 202011170700 | db block changes           |      2.34425e+07 |
+| 405 |     72884 | 202011170700 | execute count              |  44353           |
+| 406 |     72884 | 202011170700 | logons cumulative          |   1686           |
+| 407 |     72884 | 202011170700 | parse count (hard)         |   1101           |
+| 408 |     72884 | 202011170700 | parse count (total)        |  24392           |
+| 409 |     72884 | 202011170700 | parse time cpu             |    319           |
+| 410 |     72884 | 202011170700 | physical read total bytes  |      1.93712e+11 |
+| 411 |     72884 | 202011170700 | physical write total bytes |      2.34744e+10 |
+| 412 |     72884 | 202011170700 | redo size                  |      5.05059e+09 |
+| 413 |     72884 | 202011170700 | session logical reads      |      1.58133e+08 |
+| 414 |     72884 | 202011170700 | sorts (disk)               |      0           |
+| 415 |     72884 | 202011170700 | user calls                 | 135286           |
+| 416 |     72885 | 202011170800 | CPU used by this session   |  79289           |
+| 417 |     72885 | 202011170800 | db block changes           |      2.12273e+07 |
+| 418 |     72885 | 202011170800 | execute count              | 873789           |
+| 419 |     72885 | 202011170800 | logons cumulative          |   2422           |
+| 420 |     72885 | 202011170800 | parse count (hard)         |  80857           |
+| 421 |     72885 | 202011170800 | parse count (total)        | 425491           |
+| 422 |     72885 | 202011170800 | parse time cpu             |   6684           |
+| 423 |     72885 | 202011170800 | physical read total bytes  |      1.2477e+12  |
+| 424 |     72885 | 202011170800 | physical write total bytes |      2.00067e+10 |
+| 425 |     72885 | 202011170800 | redo size                  |      4.78005e+09 |
+| 426 |     72885 | 202011170800 | session logical reads      |      2.17446e+08 |
+| 427 |     72885 | 202011170800 | sorts (disk)               |      0           |
+| 428 |     72885 | 202011170800 | user calls                 | 862390           |
+| 429 |     72886 | 202011170900 | CPU used by this session   |  93664           |
+| 430 |     72886 | 202011170900 | db block changes           |      2.80339e+07 |
+| 431 |     72886 | 202011170900 | execute count              |      1.0445e+06  |
+| 432 |     72886 | 202011170900 | logons cumulative          |   4089           |
+| 433 |     72886 | 202011170900 | parse count (hard)         |   4884           |
+| 434 |     72886 | 202011170900 | parse count (total)        | 585925           |
+| 435 |     72886 | 202011170900 | parse time cpu             |   5252           |
+| 436 |     72886 | 202011170900 | physical read total bytes  |      6.20551e+11 |
+| 437 |     72886 | 202011170900 | physical write total bytes |      2.72264e+10 |
+| 438 |     72886 | 202011170900 | redo size                  |      6.06513e+09 |
+| 439 |     72886 | 202011170900 | session logical reads      |      1.64582e+08 |
+| 440 |     72886 | 202011170900 | sorts (disk)               |      0           |
+| 441 |     72886 | 202011170900 | user calls                 | 851231           |
+| 442 |     72887 | 202011171000 | CPU used by this session   | 181172           |
+| 443 |     72887 | 202011171000 | db block changes           |      2.58814e+07 |
+| 444 |     72887 | 202011171000 | execute count              | 712762           |
+| 445 |     72887 | 202011171000 | logons cumulative          |   5269           |
+| 446 |     72887 | 202011171000 | parse count (hard)         |  58310           |
+| 447 |     72887 | 202011171000 | parse count (total)        | 274849           |
+| 448 |     72887 | 202011171000 | parse time cpu             |   6471           |
+| 449 |     72887 | 202011171000 | physical read total bytes  |      2.10065e+12 |
+| 450 |     72887 | 202011171000 | physical write total bytes |      2.93137e+10 |
+| 451 |     72887 | 202011171000 | redo size                  |      6.10661e+09 |
+| 452 |     72887 | 202011171000 | session logical reads      |      3.99452e+08 |
+| 453 |     72887 | 202011171000 | sorts (disk)               |      0           |
+| 454 |     72887 | 202011171000 | user calls                 | 742609           |
+| 455 |     72888 | 202011171100 | CPU used by this session   |  86533           |
+| 456 |     72888 | 202011171100 | db block changes           |      1.44214e+07 |
+| 457 |     72888 | 202011171100 | execute count              | 657001           |
+| 458 |     72888 | 202011171100 | logons cumulative          |   4075           |
+| 459 |     72888 | 202011171100 | parse count (hard)         |   9443           |
+| 460 |     72888 | 202011171100 | parse count (total)        | 292996           |
+| 461 |     72888 | 202011171100 | parse time cpu             |   5781           |
+| 462 |     72888 | 202011171100 | physical read total bytes  |      2.98738e+11 |
+| 463 |     72888 | 202011171100 | physical write total bytes |      2.21967e+10 |
+| 464 |     72888 | 202011171100 | redo size                  |      3.43492e+09 |
+| 465 |     72888 | 202011171100 | session logical reads      |      8.74782e+07 |
+| 466 |     72888 | 202011171100 | sorts (disk)               |      0           |
+| 467 |     72888 | 202011171100 | user calls                 | 529197           |
+| 468 |     72889 | 202011171200 | CPU used by this session   |  99606           |
+| 469 |     72889 | 202011171200 | db block changes           |      4.30522e+07 |
+| 470 |     72889 | 202011171200 | execute count              | 407842           |
+| 471 |     72889 | 202011171200 | logons cumulative          |   1607           |
+| 472 |     72889 | 202011171200 | parse count (hard)         |   2895           |
+| 473 |     72889 | 202011171200 | parse count (total)        |  34350           |
+| 474 |     72889 | 202011171200 | parse time cpu             |    871           |
+| 475 |     72889 | 202011171200 | physical read total bytes  |      1.31142e+12 |
+| 476 |     72889 | 202011171200 | physical write total bytes |      5.07588e+10 |
+| 477 |     72889 | 202011171200 | redo size                  |      1.06711e+10 |
+| 478 |     72889 | 202011171200 | session logical reads      |      2.62339e+08 |
+| 479 |     72889 | 202011171200 | sorts (disk)               |      0           |
+| 480 |     72889 | 202011171200 | user calls                 | 302188           |
+| 481 |     72890 | 202011171300 | CPU used by this session   |  18194           |
+| 482 |     72890 | 202011171300 | db block changes           |      9.12665e+06 |
+| 483 |     72890 | 202011171300 | execute count              | 128226           |
+| 484 |     72890 | 202011171300 | logons cumulative          |   1476           |
+| 485 |     72890 | 202011171300 | parse count (hard)         |   1701           |
+| 486 |     72890 | 202011171300 | parse count (total)        |  76323           |
+| 487 |     72890 | 202011171300 | parse time cpu             |   1091           |
+| 488 |     72890 | 202011171300 | physical read total bytes  |      2.12217e+11 |
+| 489 |     72890 | 202011171300 | physical write total bytes |      1.05784e+10 |
+| 490 |     72890 | 202011171300 | redo size                  |      2.16197e+09 |
+| 491 |     72890 | 202011171300 | session logical reads      |      4.4464e+07  |
+| 492 |     72890 | 202011171300 | sorts (disk)               |      0           |
+| 493 |     72890 | 202011171300 | user calls                 | 195730           |
+| 494 |     72891 | 202011171400 | CPU used by this session   |  77320           |
+| 495 |     72891 | 202011171400 | db block changes           |      1.97503e+07 |
+| 496 |     72891 | 202011171400 | execute count              | 383737           |
+| 497 |     72891 | 202011171400 | logons cumulative          |   3081           |
+| 498 |     72891 | 202011171400 | parse count (hard)         |   4374           |
+| 499 |     72891 | 202011171400 | parse count (total)        |  61387           |
+| 500 |     72891 | 202011171400 | parse time cpu             |   2123           |
+| 501 |     72891 | 202011171400 | physical read total bytes  |      1.21536e+12 |
+| 502 |     72891 | 202011171400 | physical write total bytes |      1.93602e+10 |
+| 503 |     72891 | 202011171400 | redo size                  |      4.292e+09   |
+| 504 |     72891 | 202011171400 | session logical reads      |      2.03635e+08 |
+| 505 |     72891 | 202011171400 | sorts (disk)               |      0           |
+| 506 |     72891 | 202011171400 | user calls                 | 184197           |
+| 507 |     72892 | 202011171500 | CPU used by this session   |  52314           |
+| 508 |     72892 | 202011171500 | db block changes           |      3.23296e+06 |
+| 509 |     72892 | 202011171500 | execute count              | 387990           |
+| 510 |     72892 | 202011171500 | logons cumulative          |   3328           |
+| 511 |     72892 | 202011171500 | parse count (hard)         |   5520           |
+| 512 |     72892 | 202011171500 | parse count (total)        |  67241           |
+| 513 |     72892 | 202011171500 | parse time cpu             |   3032           |
+| 514 |     72892 | 202011171500 | physical read total bytes  |      2.43233e+11 |
+| 515 |     72892 | 202011171500 | physical write total bytes |      4.36932e+09 |
+| 516 |     72892 | 202011171500 | redo size                  |      7.96598e+08 |
+| 517 |     72892 | 202011171500 | session logical reads      |      9.24902e+07 |
+| 518 |     72892 | 202011171500 | sorts (disk)               |      0           |
+| 519 |     72892 | 202011171500 | user calls                 | 175602           |
+| 520 |     72893 | 202011171600 | CPU used by this session   | 114166           |
+| 521 |     72893 | 202011171600 | db block changes           |      3.49146e+06 |
+| 522 |     72893 | 202011171600 | execute count              | 430566           |
+| 523 |     72893 | 202011171600 | logons cumulative          |   3081           |
+| 524 |     72893 | 202011171600 | parse count (hard)         |   4379           |
+| 525 |     72893 | 202011171600 | parse count (total)        |  93211           |
+| 526 |     72893 | 202011171600 | parse time cpu             |   1738           |
+| 527 |     72893 | 202011171600 | physical read total bytes  |      1.27134e+12 |
+| 528 |     72893 | 202011171600 | physical write total bytes |      3.96509e+09 |
+| 529 |     72893 | 202011171600 | redo size                  |      7.62929e+08 |
+| 530 |     72893 | 202011171600 | session logical reads      |      2.50119e+08 |
+| 531 |     72893 | 202011171600 | sorts (disk)               |      0           |
+| 532 |     72893 | 202011171600 | user calls                 | 247422           |
+| 533 |     72894 | 202011171700 | CPU used by this session   |  57783           |
+| 534 |     72894 | 202011171700 | db block changes           |      3.39809e+06 |
+| 535 |     72894 | 202011171700 | execute count              | 388533           |
+| 536 |     72894 | 202011171700 | logons cumulative          |   1783           |
+| 537 |     72894 | 202011171700 | parse count (hard)         |   2167           |
+| 538 |     72894 | 202011171700 | parse count (total)        |  67432           |
+| 539 |     72894 | 202011171700 | parse time cpu             |    955           |
+| 540 |     72894 | 202011171700 | physical read total bytes  |      2.73399e+11 |
+| 541 |     72894 | 202011171700 | physical write total bytes |      3.85674e+09 |
+| 542 |     72894 | 202011171700 | redo size                  |      7.59362e+08 |
+| 543 |     72894 | 202011171700 | session logical reads      |      8.70951e+07 |
+| 544 |     72894 | 202011171700 | sorts (disk)               |      0           |
+| 545 |     72894 | 202011171700 | user calls                 | 175813           |
+| 546 |     72895 | 202011171800 | CPU used by this session   | 130353           |
+| 547 |     72895 | 202011171800 | db block changes           |      1.34579e+08 |
+| 548 |     72895 | 202011171800 | execute count              | 359265           |
+| 549 |     72895 | 202011171800 | logons cumulative          |   1224           |
+| 550 |     72895 | 202011171800 | parse count (hard)         |   1799           |
+| 551 |     72895 | 202011171800 | parse count (total)        |  46857           |
+| 552 |     72895 | 202011171800 | parse time cpu             |    344           |
+| 553 |     72895 | 202011171800 | physical read total bytes  |      1.7081e+12  |
+| 554 |     72895 | 202011171800 | physical write total bytes |      1.25775e+11 |
+| 555 |     72895 | 202011171800 | redo size                  |      2.31576e+10 |
+| 556 |     72895 | 202011171800 | session logical reads      |      3.95184e+08 |
+| 557 |     72895 | 202011171800 | sorts (disk)               |      0           |
+| 558 |     72895 | 202011171800 | user calls                 | 130465           |
+| 559 |     72896 | 202011171900 | CPU used by this session   |  81905           |
+| 560 |     72896 | 202011171900 | db block changes           |      2.07023e+07 |
+| 561 |     72896 | 202011171900 | execute count              | 287289           |
+| 562 |     72896 | 202011171900 | logons cumulative          |    549           |
+| 563 |     72896 | 202011171900 | parse count (hard)         |    373           |
+| 564 |     72896 | 202011171900 | parse count (total)        |   7602           |
+| 565 |     72896 | 202011171900 | parse time cpu             |     75           |
+| 566 |     72896 | 202011171900 | physical read total bytes  |      2.42962e+11 |
+| 567 |     72896 | 202011171900 | physical write total bytes |      6.60151e+10 |
+| 568 |     72896 | 202011171900 | redo size                  |      9.61831e+09 |
+| 569 |     72896 | 202011171900 | session logical reads      |      1.45812e+08 |
+| 570 |     72896 | 202011171900 | sorts (disk)               |      0           |
+| 571 |     72896 | 202011171900 | user calls                 |  15564           |
+| 572 |     72897 | 202011172000 | CPU used by this session   |  84738           |
+| 573 |     72897 | 202011172000 | db block changes           |      1.77344e+06 |
+| 574 |     72897 | 202011172000 | execute count              |  37645           |
+| 575 |     72897 | 202011172000 | logons cumulative          |    620           |
+| 576 |     72897 | 202011172000 | parse count (hard)         |   1205           |
+| 577 |     72897 | 202011172000 | parse count (total)        |  14380           |
+| 578 |     72897 | 202011172000 | parse time cpu             |    153           |
+| 579 |     72897 | 202011172000 | physical read total bytes  |      1.62671e+12 |
+| 580 |     72897 | 202011172000 | physical write total bytes |      4.2513e+09  |
+| 581 |     72897 | 202011172000 | redo size                  |      6.46379e+08 |
+| 582 |     72897 | 202011172000 | session logical reads      |      2.25796e+08 |
+| 583 |     72897 | 202011172000 | sorts (disk)               |      2           |
+| 584 |     72897 | 202011172000 | user calls                 |  70419           |
+| 585 |     72898 | 202011172100 | CPU used by this session   |  24654           |
+| 586 |     72898 | 202011172100 | db block changes           | 344263           |
+| 587 |     72898 | 202011172100 | execute count              | 114106           |
+| 588 |     72898 | 202011172100 | logons cumulative          |    711           |
+| 589 |     72898 | 202011172100 | parse count (hard)         |   1166           |
+| 590 |     72898 | 202011172100 | parse count (total)        |  32649           |
+| 591 |     72898 | 202011172100 | parse time cpu             |    695           |
+| 592 |     72898 | 202011172100 | physical read total bytes  |      6.01038e+11 |
+| 593 |     72898 | 202011172100 | physical write total bytes |      2.94635e+09 |
+| 594 |     72898 | 202011172100 | redo size                  |      8.2928e+07  |
+| 595 |     72898 | 202011172100 | session logical reads      |      3.56925e+07 |
+| 596 |     72898 | 202011172100 | sorts (disk)               |      0           |
+| 597 |     72898 | 202011172100 | user calls                 |  73789           |
+| 598 |     72899 | 202011172200 | CPU used by this session   | 131923           |
+| 599 |     72899 | 202011172200 | db block changes           |      1.52393e+07 |
+| 600 |     72899 | 202011172200 | execute count              |      3.27788e+06 |
+| 601 |     72899 | 202011172200 | logons cumulative          |    414           |
+| 602 |     72899 | 202011172200 | parse count (hard)         |   8503           |
+| 603 |     72899 | 202011172200 | parse count (total)        |  25425           |
+| 604 |     72899 | 202011172200 | parse time cpu             |  25992           |
+| 605 |     72899 | 202011172200 | physical read total bytes  |      7.24731e+11 |
+| 606 |     72899 | 202011172200 | physical write total bytes |      2.0268e+10  |
+| 607 |     72899 | 202011172200 | redo size                  |      2.84179e+09 |
+| 608 |     72899 | 202011172200 | session logical reads      |      1.27101e+08 |
+| 609 |     72899 | 202011172200 | sorts (disk)               |      0           |
+| 610 |     72899 | 202011172200 | user calls                 |      3.20357e+06 |
+| 611 |     72853 | 202011160000 | user commits               |    nan           |
+| 612 |     72854 | 202011160100 | user commits               |    372           |
+| 613 |     72855 | 202011160200 | user commits               |    419           |
+| 614 |     72856 | 202011160300 | user commits               |    350           |
+| 615 |     72857 | 202011160400 | user commits               |    813           |
+| 616 |     72858 | 202011160500 | user commits               |   6851           |
+| 617 |     72859 | 202011160600 | user commits               |   9290           |
+| 618 |     72860 | 202011160700 | user commits               |   5648           |
+| 619 |     72861 | 202011160800 | user commits               |   5189           |
+| 620 |     72862 | 202011160900 | user commits               |  10475           |
+| 621 |     72863 | 202011161000 | user commits               | 117818           |
+| 622 |     72864 | 202011161100 | user commits               |   8230           |
+| 623 |     72865 | 202011161200 | user commits               |   6466           |
+| 624 |     72866 | 202011161300 | user commits               |   4745           |
+| 625 |     72867 | 202011161400 | user commits               |   4943           |
+| 626 |     72868 | 202011161500 | user commits               |   4816           |
+| 627 |     72869 | 202011161600 | user commits               |   5161           |
+| 628 |     72870 | 202011161700 | user commits               |   6773           |
+| 629 |     72871 | 202011161800 | user commits               |   4429           |
+| 630 |     72872 | 202011161900 | user commits               |   2209           |
+| 631 |     72873 | 202011162000 | user commits               |   3569           |
+| 632 |     72874 | 202011162100 | user commits               |   2005           |
+| 633 |     72875 | 202011162200 | user commits               |   2110           |
+| 634 |     72876 | 202011162300 | user commits               |   3526           |
+| 635 |     72877 | 202011170000 | user commits               |    150           |
+| 636 |     72878 | 202011170100 | user commits               |    319           |
+| 637 |     72879 | 202011170200 | user commits               |    484           |
+| 638 |     72880 | 202011170300 | user commits               |    409           |
+| 639 |     72881 | 202011170400 | user commits               |    766           |
+| 640 |     72882 | 202011170500 | user commits               |   4889           |
+| 641 |     72883 | 202011170600 | user commits               |   1841           |
+| 642 |     72884 | 202011170700 | user commits               |   2542           |
+| 643 |     72885 | 202011170800 | user commits               |  74051           |
+| 644 |     72886 | 202011170900 | user commits               |   9802           |
+| 645 |     72887 | 202011171000 | user commits               |  87958           |
+| 646 |     72888 | 202011171100 | user commits               |   7242           |
+| 647 |     72889 | 202011171200 | user commits               |   6161           |
+| 648 |     72890 | 202011171300 | user commits               |   2995           |
+| 649 |     72891 | 202011171400 | user commits               |   4590           |
+| 650 |     72892 | 202011171500 | user commits               |   3335           |
+| 651 |     72893 | 202011171600 | user commits               |   4189           |
+| 652 |     72894 | 202011171700 | user commits               |   3413           |
+| 653 |     72895 | 202011171800 | user commits               |   2844           |
+| 654 |     72896 | 202011171900 | user commits               |   1028           |
+| 655 |     72897 | 202011172000 | user commits               |   2018           |
+| 656 |     72898 | 202011172100 | user commits               |   1057           |
+| 657 |     72899 | 202011172200 | user commits               |   3590           |
+| 658 |     72880 | 202011170300 | elapsed                    |   3605           |
+| 659 |     72857 | 202011160400 | elapsed                    |   3603           |
+| 660 |     72886 | 202011170900 | elapsed                    |   3605           |
+| 661 |     72860 | 202011160700 | elapsed                    |   3603           |
+| 662 |     72878 | 202011170100 | elapsed                    |   3543           |
+| 663 |     72887 | 202011171000 | elapsed                    |   3606           |
+| 664 |     72853 | 202011160000 | elapsed                    |   3603           |
+| 665 |     72888 | 202011171100 | elapsed                    |   3605           |
+| 666 |     72896 | 202011171900 | elapsed                    |   3606           |
+| 667 |     72861 | 202011160800 | elapsed                    |   3605           |
+| 668 |     72877 | 202011170000 | elapsed                    |   3604           |
+| 669 |     72891 | 202011171400 | elapsed                    |   3545           |
+| 670 |     72899 | 202011172200 | elapsed                    |   3606           |
+| 671 |     72859 | 202011160600 | elapsed                    |   3604           |
+| 672 |     72852 | 202011152300 | elapsed                    |   3604           |
+| 673 |     72854 | 202011160100 | elapsed                    |   3604           |
+| 674 |     72855 | 202011160200 | elapsed                    |   3604           |
+| 675 |     72856 | 202011160300 | elapsed                    |   3604           |
+| 676 |     72868 | 202011161500 | elapsed                    |   3605           |
+| 677 |     72870 | 202011161700 | elapsed                    |   3604           |
+| 678 |     72871 | 202011161800 | elapsed                    |   3605           |
+| 679 |     72872 | 202011161900 | elapsed                    |   3604           |
+| 680 |     72881 | 202011170400 | elapsed                    |   3604           |
+| 681 |     72884 | 202011170700 | elapsed                    |   3604           |
+| 682 |     72864 | 202011161100 | elapsed                    |   3604           |
+| 683 |     72890 | 202011171300 | elapsed                    |   3606           |
+| 684 |     72862 | 202011160900 | elapsed                    |   3604           |
+| 685 |     72866 | 202011161300 | elapsed                    |   3605           |
+| 686 |     72867 | 202011161400 | elapsed                    |   3606           |
+| 687 |     72873 | 202011162000 | elapsed                    |   3605           |
+| 688 |     72874 | 202011162100 | elapsed                    |   3605           |
+| 689 |     72875 | 202011162200 | elapsed                    |   3605           |
+| 690 |     72885 | 202011170800 | elapsed                    |   3604           |
+| 691 |     72879 | 202011170200 | elapsed                    |   3604           |
+| 692 |     72863 | 202011161000 | elapsed                    |   3606           |
+| 693 |     72865 | 202011161200 | elapsed                    |   3545           |
+| 694 |     72858 | 202011160500 | elapsed                    |   3604           |
+| 695 |     72869 | 202011161600 | elapsed                    |   3606           |
+| 696 |     72876 | 202011162300 | elapsed                    |   3605           |
+| 697 |     72882 | 202011170500 | elapsed                    |   3603           |
+| 698 |     72883 | 202011170600 | elapsed                    |   3604           |
+| 699 |     72889 | 202011171200 | elapsed                    |   3604           |
+| 700 |     72892 | 202011171500 | elapsed                    |   3606           |
+| 701 |     72893 | 202011171600 | elapsed                    |   3606           |
+| 702 |     72894 | 202011171700 | elapsed                    |   3604           |
+| 703 |     72895 | 202011171800 | elapsed                    |   3605           |
+| 704 |     72897 | 202011172000 | elapsed                    |   3605           |
+| 705 |     72898 | 202011172100 | elapsed                    |   3606           |
++-----+-----------+--------------+----------------------------+------------------+

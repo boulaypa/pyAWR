@@ -1,0 +1,106 @@
+-- ----------------------------------------------------------------
+SQ contention
+OD Serializing DDLs
+PS contention
+TO contention
+TQ DDL contention
+WT contention
+MW contention
+TK Auto Task Serialization
+TK Auto Task Slave Lockout
+JS q mem clnup lck
+CI contention
+PE contention
+FP global fob contention
+KD determine DBRM master
+PV syncstart
+PW perwarm status in dbw0
+CR block range reuse ckpt
+RS persist alert level
+RS write alert level
+TX row lock contention
+CN race with init
+CB role operation
+RC Result Cache: Contention
+SR contention
+IA contention
+SW contention
+TC contention
+PW flush prewarm buffers
+RS read alert level
+TM contention
+TX index contention
+ZH compression analysis
+PA read a privilege capture
+JQ contention
+UL contention
+TB SQL Tuning Base Cache Load
+SH contention
+TL contention
+TH metric threshold evaluation
+KM contention
+FS online log operation
+CT state
+US contention
+PD contention
+DR contention
+RD RAC load
+WP contention
+JS queue lock
+PR contention
+RS prevent file delete
+DW contention
+FH contention
+OP OLS Cleanup unused profiles
+KP contention
+SE contention
+TQ INI contention
+FU contention
+JS job recov lock
+TC contention2
+RO fast object reuse
+MV datafile move
+XR database force logging
+TA contention
+HW contention
+WG lock fso
+JD contention
+AP contention
+IT contention
+BR file shrink
+FD Restore point create/drop
+TS contention
+SK contention
+SJ Slave Task Cancel
+DL contention
+WG delete fso
+CU contention
+WF contention
+AF task serialization
+RR contention
+JS contention
+KT contention
+CF contention
+KO fast object checkpoint
+WL contention
+IS contention
+FS contention
+FD Flashback logical operations
+TX contention
+TX allocate ITL entry
+TD KTF dump entries
+FB contention
+AS service activation
+SS contention
+TT contention
+TP contention
+AE lock
+TQ TM contention
+DP contention
+PG contention
+RT contention
+MR contention
+CT CTWR process start/stop
+RS prevent aging list update
+DT contention
+AC acquiring partition id

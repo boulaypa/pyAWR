@@ -1,0 +1,450 @@
+<msg time='2020-09-25T15:54:10.887+02:00' org_id='oracle' comp_id='clients'
+ msg_id='dbgrmmdcrf_create_relation_full:1953:1503427940' type='NOTIFICATION' group='create'
+ level='16' host_id='SR072990CTI3700.hm.dm.ad' host_addr='10.221.78.186'
+ version='1'>
+ <txt>Create Relation ADR_CONTROL
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.005+02:00' org_id='oracle' comp_id='clients'
+ msg_id='dbgrmmdcrf_create_relation_full:1953:1503427940' type='NOTIFICATION' group='create'
+ level='16' host_id='SR072990CTI3700.hm.dm.ad' host_addr='10.221.78.186'>
+ <txt>Create Relation ADR_INVALIDATION
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.104+02:00' org_id='oracle' comp_id='clients'
+ msg_id='dbgrmmdcrf_create_relation_full:1953:1503427940' type='NOTIFICATION' group='create'
+ level='16' host_id='SR072990CTI3700.hm.dm.ad' host_addr='10.221.78.186'>
+ <txt>Create Relation INC_METER_IMPT_DEF
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.243+02:00' org_id='oracle' comp_id='clients'
+ msg_id='dbgrmmdcrf_create_relation_full:1953:1503427940' type='NOTIFICATION' group='create'
+ level='16' host_id='SR072990CTI3700.hm.dm.ad' host_addr='10.221.78.186'>
+ <txt>Create Relation INC_METER_PK_IMPTS
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.362+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+
+***********************************************************************
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.362+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORAGENB6)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=IOMUTX5)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+  VERSION INFORMATION:
+TNS for Linux: Version 12.1.0.2.0 - Production
+TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Time: 25-SEP-2020 15:54:11
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tracing not turned on.
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tns error struct:
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns main err code: 12564
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt main err code: 0
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-09-25T15:54:11.363+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt OS err code: 0
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.060+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+
+***********************************************************************
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.060+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORARFPX1)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=IONTOT1)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.060+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+  VERSION INFORMATION:
+TNS for Linux: Version 12.1.0.2.0 - Production
+TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.060+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Time: 26-SEP-2020 08:10:30
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.061+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tracing not turned on.
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.061+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tns error struct:
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.061+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns main err code: 12564
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.061+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.061+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.061+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.061+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt main err code: 0
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.061+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-09-26T08:10:30.061+02:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt OS err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.735+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+
+***********************************************************************
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.736+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORAGENR6)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=COMUTX6)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.736+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+  VERSION INFORMATION:
+TNS for Linux: Version 12.1.0.2.0 - Production
+TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.736+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Time: 05-DEC-2020 09:07:26
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.736+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tracing not turned on.
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.736+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tns error struct:
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.736+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns main err code: 12564
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.736+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.737+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.737+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.737+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt main err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.737+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:26.737+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt OS err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+
+***********************************************************************
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORAGENR6)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=COMUTX6)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+  VERSION INFORMATION:
+TNS for Linux: Version 12.1.0.2.0 - Production
+TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Time: 05-DEC-2020 09:07:27
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tracing not turned on.
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tns error struct:
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns main err code: 12564
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.360+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.361+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt main err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.361+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.361+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt OS err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+
+***********************************************************************
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORAGENR6)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=COMUTX6)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>
+  VERSION INFORMATION:
+TNS for Linux: Version 12.1.0.2.0 - Production
+TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Time: 05-DEC-2020 09:07:27
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tracing not turned on.
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>  Tns error struct:
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns main err code: 12564
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    ns secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt main err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.959+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt secondary err code: 0
+ </txt>
+</msg>
+<msg time='2020-12-05T09:07:27.960+01:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='SR072990CTI3700.hm.dm.ad'
+ host_addr='10.221.78.186'>
+ <txt>    nt OS err code: 0
+ </txt>
+</msg>

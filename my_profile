@@ -1,0 +1,5 @@
+export http_proxy=http://BOULAY-P:India2020@10.221.53.39:8080
+export https_proxy=http://BOULAY-P:India2020@10.221.53.39:8080
+export PATH=:/logiciel/ms/ref/local/python/bin:$PATH
+export LD_LIBRARY_PATH=:/logiciel/app/oracle/instantclient_12_1::/logiciel/ms/users/postgres/.openssl/lib:/logiciel/ms/ref/local/python/lib:/usr/lib:/usr/lib64:/opt/rh/rh-postgresql9.4/root/usr/lib64/:/opt/rh/rh-postgresql9.4/root/usr/lib/:/logiciel/app/oracle/instantclient_12_1:
+export AWR_MINER_HOME=/home/su.boulay-p

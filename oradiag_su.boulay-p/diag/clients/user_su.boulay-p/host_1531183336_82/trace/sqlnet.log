@@ -1,0 +1,109 @@
+Fri Sep 25 15:54:10 2020
+Create Relation ADR_CONTROL
+Create Relation ADR_INVALIDATION
+Create Relation INC_METER_IMPT_DEF
+Create Relation INC_METER_PK_IMPTS
+
+
+***********************************************************************
+
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORAGENB6)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=IOMUTX5)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 12.1.0.2.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+  Time: 25-SEP-2020 15:54:11
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12564
+    
+TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+    ns secondary err code: 0
+    nt main err code: 0
+    nt secondary err code: 0
+    nt OS err code: 0
+Sat Sep 26 08:10:30 2020
+
+
+***********************************************************************
+
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORARFPX1)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=IONTOT1)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 12.1.0.2.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+  Time: 26-SEP-2020 08:10:30
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12564
+    
+TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+    ns secondary err code: 0
+    nt main err code: 0
+    nt secondary err code: 0
+    nt OS err code: 0
+Sat Dec 05 09:07:26 2020
+
+
+***********************************************************************
+
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORAGENR6)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=COMUTX6)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 12.1.0.2.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+  Time: 05-DEC-2020 09:07:26
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12564
+    
+TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+    ns secondary err code: 0
+    nt main err code: 0
+    nt secondary err code: 0
+    nt OS err code: 0
+Sat Dec 05 09:07:27 2020
+
+
+***********************************************************************
+
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORAGENR6)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=COMUTX6)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 12.1.0.2.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+  Time: 05-DEC-2020 09:07:27
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12564
+    
+TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+    ns secondary err code: 0
+    nt main err code: 0
+    nt secondary err code: 0
+    nt OS err code: 0
+Sat Dec 05 09:07:27 2020
+
+
+***********************************************************************
+
+Fatal NI connect error 12514, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ORAGENR6)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=COMUTX6)(CID=(PROGRAM=python3)(HOST=SR072990CTI3700.hm.dm.ad)(USER=su.boulay-p))))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 12.1.0.2.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 12.1.0.2.0 - Production
+  Time: 05-DEC-2020 09:07:27
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12564
+    
+TNS-12564: Message 12564 not found; No message file for product=network, facility=TNS
+    ns secondary err code: 0
+    nt main err code: 0
+    nt secondary err code: 0
+    nt OS err code: 0

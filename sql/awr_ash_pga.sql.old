@@ -1,0 +1,27 @@
+WITH pga_data as
+(
+  SELECT /*+ MATERIALIZED */
+      sample_time,    
+      username,
+      SUM(ash.pga_allocated/1024/1024) AS sum_pga_mb
+  FROM
+      dba_hist_active_sess_history ash,
+      dba_users u
+  WHERE ash.user_id = u.user_id
+  AND sample_time >= __START_DATE__
+  AND sample_time <= __END_DATE__
+  GROUP BY username, sample_time
+),
+top as (
+   SELECT username,
+          sum_pga_mb
+   FROM top
+   ORDER BY sum_pga_mb
+)
+SELECT 
+    to_char(c.date_min, 'YYYYMMDDHH24MISS') date_min,
+    sum_pga_mb
+FROM
+    pga_data h,
+    top t
+WHERE h.username(+) = t.username 

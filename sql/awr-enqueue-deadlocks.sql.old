@@ -1,0 +1,8 @@
+SELECT TO_CHAR(a.end_interval_time,'YYYYMMDDHH24MU') snap_date,
+       s.value enq_deadlocks
+FROM dba_hist_sysstat s, 
+     dba_hist_snapshot a
+WHERE a.begin_interval_time >= __START_DATE__
+AND a.end_interval_time <= __END_DATE__
+AND a.snap_id = s.snap_id
+AND s.stat_name = 'enqueue deadlocks'

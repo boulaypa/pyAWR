@@ -1,0 +1,90 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2019.12.16.10.21.10;	author python;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@with t_interval as
+(
+ select /*+ inline */ sysdate-30 begin, sysdate as end from dual
+)
+select
+  begin_time      ,
+  end_time        ,
+  aas             ,
+  logons_sec      ,
+  redo_sec        ,
+  user_calls_sec  ,
+  exec_sec        ,
+  phys_reads_sec  ,
+  network_sec     ,
+  io_mb_sec       ,
+  txn_sec         ,
+  phys_writes_sec ,
+  io_req_sec      ,
+  lio_txn         ,
+  parse_cnt_txn   ,
+  phys_reads_txn  ,
+  redo_txn        ,
+  response_txn    ,
+  db_changes_txn  ,
+  avg_1b_sync_read,
+  sql_response
+from
+(
+  select
+    begin_time    ,
+    end_time      ,
+    metric_name   ,
+    value
+  from
+    dba_hist_sysmetric_history,
+    t_interval t
+  where begin_time >= t.begin
+    and end_time <= t.end
+    and dbid = (select d.dbid from v$database d)
+    and instance_number = (select i.instance_number from v$instance i)
+)
+pivot
+(
+  max(value) for metric_name in
+    (
+      'Logons Per Sec'                                as logons_sec       ,
+      'Redo Generated Per Sec'                        as redo_sec         ,
+      'Average Active Sessions'                       as aas              ,
+      'Total Parse Count Per Txn'                     as parse_cnt_txn    ,
+      'Physical Reads Per Txn'                        as phys_reads_txn   ,
+      'Redo Generated Per Txn'                        as redo_txn         ,
+      'User Calls Per Sec'                            as user_calls_sec   ,
+      'Average Synchronous Single-Block Read Latency' as avg_1b_sync_read ,
+      'Response Time Per Txn'                         as response_txn     ,
+      'Executions Per Sec'                            as exec_sec         ,
+      'Physical Reads Per Sec'                        as phys_reads_sec   ,
+      'Network Traffic Volume Per Sec'                as network_sec      ,
+      'Logical Reads Per Txn'                         as lio_txn          ,
+      'DB Block Changes Per Txn'                      as db_changes_txn   ,
+      'I/O Megabytes per Second'                      as io_mb_sec        ,
+      'User Transaction Per Sec'                      as txn_sec          ,
+      'SQL Service Response Time'                     as sql_response     ,
+      'Physical Writes Per Sec'                       as phys_writes_sec  ,
+      'I/O Requests per Second'                       as io_req_sec
+    )
+)
+order by begin_time;
+@

@@ -1,0 +1,10 @@
+[' 01 ### a38hy9vr2d9m0         99010540 MOOX1'
+ ' 02  00 181znvwszm44z       3092608796 MOOX1'
+ ' 03  00 116mys0mv7yws       3598182384 MOOX1'
+ ' 04  00 8m9stjm5snxt1       1084429458 MOOX1'
+ ' 05  00 fyj85aus3pux4       3780569733 MOOX1'
+ ' 06  00 1byk5m1rkxs2t       1164009046 MOOX1'
+ ' 07  00 8hm1qhrs4f9vg        370418906 MOOX1'
+ ' 08  00 a70xj3wcgv1kb       3167254998 MOOX1'
+ ' 09  00 g91j5jwy2vuy9        155297993 MOOX1'
+ ' 10  00 94m49j8jvdqpf       2505257377 MOOX1']

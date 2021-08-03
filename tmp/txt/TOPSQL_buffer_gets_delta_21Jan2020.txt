@@ -1,0 +1,10 @@
+[' 01  20 a6jvvkc0b8987       1285146892 LIGX1'
+ ' 02  08 88vj0uf17q3yn        406847313 LIGX1'
+ ' 03  06 dv603a1b51h3n       1285146892 LIGX1'
+ ' 04  06 fgu6f8gt5gs3t       2042124140 LIGX1'
+ ' 05  05 3zv16mvfpyd22       2289069736 LIGX1'
+ ' 06  04 88vj0uf17q3yn       1285146892 LIGX1'
+ ' 07  03 a6jvvkc0b8987        265279136 LIGX1'
+ ' 08  03 fgu6f8gt5gs3t       1073948648 LIGX1'
+ ' 09  03 a6jvvkc0b8987        406847313 LIGX1'
+ ' 10  03 a6jvvkc0b8987       1248555094 LIGX1']

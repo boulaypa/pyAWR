@@ -1,0 +1,6 @@
+https://github.com/MarisElsins/TOOLS/blob/master/SQL/AWR/awr_stat_trend.sq
+https://pbpython.com/pdf-reports.html
+http://www.pafumi.net/Statspack_Analysis.html#Load_Profile_Section
+https://sameer-samspeaks.blogspot.com/2013/12/database-trend-analysis.html
+https://github.com/mkudija/blog/blob/master/content/downloads/code/matplotlib-twin-axes/matplotlib-twin-axes.py
+https://matplotlib.org/3.1.1/gallery/ticks_and_spines/multiple_yaxis_with_spines.html

@@ -1,0 +1,89 @@
+
+SELECT ECCIIDFSYS "EE0020A-CSR1",
+       ECCICODERA,
+       ECCITYPCPT,
+       ECCINUMCCO,
+       ECCINUMCIN,
+       ECCICODGRA,
+       ECCICODPAR,
+       ECCINUMPAR,
+       ECDOCODCGS,
+       ECDOECHPBA,
+       ECDOPEREI2,
+       ECDOMODGPA,
+       ECDOMODRGC,
+       ECDODDEPBA,
+       ECDODFEPBA,
+       ECDOECOCR2,
+       ECDODDEOPE,
+       ECCIACOBI1
+FROM
+  (SELECT C . ECCIIDFSYS,
+          C . ECCICODERA,
+          C . ECCITYPCPT,
+          C . ECCINUMCCO,
+          C . ECCINUMCIN,
+          C . ECCICODGRA,
+          C . ECCICODPAR,
+          C . ECCINUMPAR,
+          A . ECDOCODCGS,
+          A . ECDOECHPBA,
+          A . ECDOPEREI2,
+          A . ECDOMODGPA,
+          A . ECDOMODRGC,
+          A . ECDODDEPBA,
+          A . ECDODFEPBA,
+          A . ECDOECOCR2,
+          A . ECDODDEOPE,
+          C . ECCIACOBI1,
+          RANK () OVER (PARTITION BY ECDOECOCR1
+                        ORDER BY ECDODDEOPE DESC , ECDOECOCR2 DESC) AS OPERATION
+   FROM ECCINDIV C
+   INNER JOIN ECDOADMH A ON (A . ECDOECOCR1 = C . ECCIIDFSYS)
+   WHERE C . ECCICODSIT = :b1
+     AND C . ECCICODERA = :b2
+     AND A . ECDOCODETA = 'VA'
+     AND A . ECDODDEOPE <= :b3
+     AND C . ECCICODPAR IN (:b4 ,
+                            :b5 ,
+                            :b6 ,
+                            :b7 ,
+                            :b8)
+     AND (A . ECDOMODGPA IN ('I',
+                             'P')
+          OR A . ECDOMODGPA IN ('C',
+                                'B')
+          AND C . ECCITYPCPT = 'C')
+     AND (C . ECCINOPART BETWEEN :b9 AND :b10)
+   ORDER BY C . ECCIIDFSYS) AAA
+WHERE OPERATION = 1
+  AND ECDOMODRGC NOT IN (:b11 ,
+                         :b12 ,
+                         :b13 ,
+                         :b14 ,
+                         :b15 ,
+                         :b16 ,
+                         :b17 ,
+                         :b18 ,
+                         :b19 ,
+                         :b20)
+  AND ECDOMODRGC IN (:b21 ,
+                     :b22 ,
+                     :b23 ,
+                     :b24 ,
+                     :b25 ,
+                     :b26 ,
+                     :b27 ,
+                     :b28 ,
+                     :b29 ,
+                     :b30)
+  AND (ECDOECHPBA IN (:b31 ,
+                      :b32 ,
+                      :b33 ,
+                      :b34 ,
+                      :b35)
+       OR (:b31 = ' '
+           AND :b32 = ' '
+           AND :b33 = ' '
+           AND :b34 = ' '
+           AND :b35 = ' '))

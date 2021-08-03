@@ -1,0 +1,37 @@
+#metrics=parse_calls_delta
+#metrics=cpu_time_delta
+#metrics=disk_reads_delta
+#metrics=apwait_delta
+#metrics=parse_calls_delta
+#metrics=parse_calls_x_delta
+#metrics=invalidations_delta
+#metrics=loads_delta
+#metrics=buffer_gets_delta
+#metrics=executions_delta
+#
+#start="TO_DATE('20190801','YYYYMMDD')"
+#end="TO_DATE('20190905','YYYYMMDD')"
+#
+#id=2q21sxbhsdbmx
+#id=51pax1vf88hby
+#id=2wbv8tg7xgdrb
+#id=2q21sxbhsdbmx
+#id=705p9k1z0qsfq
+#id=b6243y0rb6sux
+#id=1zw15nxf1canp
+#id=7v4z3882njj4h
+#id=4pnwbd86xatgj
+#id=1z6cvs0yb8dtn
+#
+#start="TO_DATE('2019040820','YYYYMMDDHH24')"
+#end="TO_DATE('2019040901','YYYYMMDDHH24')"
+#tag=08Avr2019
+#
+#start="TO_DATE('2019120920','YYYYMMDDHH24')"
+#end="TO_DATE('2019121002','YYYYMMDDHH24')"
+#tag="09Dec2019"
+#
+#for metrics in parse_calls_delta cpu_time_delta disk_reads_delta apwait_delta parse_calls_delta buffer_gets_delta executions_delta elapsed_time_delta
+#do
+#./sql_id.py NTOP00 $id $metrics "$start" "$end" sql_${id}_${metrics}_${tag}.png
+#done

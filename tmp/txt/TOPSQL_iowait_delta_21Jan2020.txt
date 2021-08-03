@@ -1,0 +1,10 @@
+[' 01  66 amawva656rz0k       3158313249 MOOX1'
+ ' 02  12 a70xj3wcgv1kb       3167254998 MOOX1'
+ ' 03  09 g91j5jwy2vuy9        155297993 MOOX1'
+ ' 04  06 663p0m0p39qrd       2996364776 DS_USERX'
+ ' 05  02 4udwsh0t1wnw7       1546270724 DS_USERX'
+ ' 06  02 a7jybx3p81vu7        353861672 MOOX1'
+ ' 07  01 21nzntzrcyq8d       2910910799 DS_USERX'
+ ' 08  01 0pprkf7wt4p60       1546270724 DS_USERX'
+ ' 09  01 70hp1609a32tw       2067927391 MOOX1'
+ ' 10  00 3wntznp22rxzs        665588797 DS_USERX']

@@ -1,0 +1,194 @@
+Traceback (most recent call last):
+  File "/usr/local/lib64/python3.6/site-packages/pandas/io/sql.py", line 1595, in execute
+    cur.execute(*args)
+cx_Oracle.DatabaseError: ORA-00942: table or view does not exist
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/python/scripts/python/src/top_sql.py", line 112, in <module>
+    main(args)
+  File "/home/python/scripts/python/src/top_sql.py", line 62, in main
+    df = pd.read_sql(sql2exec, con=conn)
+  File "/usr/local/lib64/python3.6/site-packages/pandas/io/sql.py", line 410, in read_sql
+    chunksize=chunksize,
+  File "/usr/local/lib64/python3.6/site-packages/pandas/io/sql.py", line 1645, in read_query
+    cursor = self.execute(*args)
+  File "/usr/local/lib64/python3.6/site-packages/pandas/io/sql.py", line 1610, in execute
+    raise_with_traceback(ex)
+  File "/usr/local/lib64/python3.6/site-packages/pandas/compat/__init__.py", line 47, in raise_with_traceback
+    raise exc.with_traceback(traceback)
+  File "/usr/local/lib64/python3.6/site-packages/pandas/io/sql.py", line 1595, in execute
+    cur.execute(*args)
+pandas.io.sql.DatabaseError: Execution failed on sql 'WITH snaps AS
+(
+   SELECT
+      *
+   FROM
+      dba_hist_snapshot NATURAL
+      JOIN
+         dba_hist_database_instance
+   WHERE
+      db_name = 'ORAGENX6'
+   AND begin_interval_time > TO_DATE('2020012100','YYYYMMDDHH24')
+   AND begin_interval_time < TO_DATE('2020012123','YYYYMMDDHH24')
+),
+sqlstat AS   (    SELECT stat.dbid,  
+                         stat.instance_number,  
+                         stat.snap_id,  
+                         stat.parsing_user_id,
+                         snaps.begin_interval_time,  
+                         stat.sql_id,  
+                         stat.plan_hash_value,  
+                         stat.end_of_fetch_count_delta,  
+                         stat.sorts_delta,  
+                         stat.px_servers_execs_delta,  
+                         stat.loads_delta,  
+                         stat.invalidations_delta,  
+                         stat.buffer_gets_delta,  
+                         stat.disk_reads_delta,  
+                         stat.cpu_time_delta,  
+                         stat.elapsed_time_delta,  
+                         stat.fetches_delta,  
+                         stat.rows_processed_delta,  
+                         stat.executions_delta,  
+                         stat.parse_calls_delta,  
+                         stat.iowait_delta,  
+                         stat.clwait_delta,  
+                         stat.apwait_delta,  
+                         stat.ccwait_delta,  
+                         stat.direct_writes_delta,  
+                         stat.plsexec_time_delta,  
+                         stat.javexec_time_delta,  
+                         CASE  
+                           WHEN stat.executions_delta > 0 THEN  
+                           stat.buffer_gets_delta / stat.executions_delta  
+                           ELSE 0  
+                         END                       buffer_gets_x_delta,  
+                         CASE  
+                           WHEN stat.executions_delta > 0 THEN  
+                           stat.disk_reads_delta / stat.executions_delta  
+                           ELSE 0  
+                         END                       disk_reads_x_delta,  
+                         CASE  
+                           WHEN stat.executions_delta > 0 THEN  
+                           stat.cpu_time_delta / stat.executions_delta  
+                           ELSE 0  
+                         END                       cpu_time_x_delta,  
+                         CASE  
+                           WHEN stat.executions_delta > 0 THEN  
+                           stat.elapsed_time_delta / stat.executions_delta  
+                           ELSE 0  
+                         END                       elapsed_time_x_delta,  
+                         CASE  
+                           WHEN stat.buffer_gets_delta > 0 THEN  
+                           stat.disk_reads_delta / stat.buffer_gets_delta  
+                           ELSE 0  
+                         END                       plio_ratio_delta,  
+                         CASE  
+                           WHEN stat.elapsed_time_delta > 0 THEN  
+                           stat.cpu_time_delta / stat.elapsed_time_delta  
+                           ELSE 0  
+                         END                       cpu_ela_ratio_delta,  
+                         CASE  
+                           WHEN stat.executions_delta > 0 THEN  
+                           stat.rows_processed_delta / stat.executions_delta  
+                           ELSE 0  
+                         END                       rows_processed_x_delta,
+                         CASE  
+                           WHEN stat.executions_delta > 0 THEN  
+                           stat.parse_calls_delta / stat.executions_delta  
+                           ELSE 0  
+                         END                       parse_calls_x_delta  
+                  FROM   dba_hist_sqlstat stat,  
+                         snaps  
+                  WHERE  stat.snap_id = snaps.snap_id  
+                         AND PARSING_SCHEMA_NAME like 'LIG%'
+                         AND stat.dbid = snaps.dbid  
+                         AND stat.instance_number = snaps.instance_number  
+                         ),  
+ top  
+      AS (SELECT dbid, sql_id, plan_hash_value, parsing_user_id, top_delta, top_pct, top_total, RANK() OVER ( ORDER BY top_delta DESC ) rank  
+          FROM   (SELECT   DISTINCT dbid, sql_id,  
+                                    plan_hash_value,  
+                                    parsing_user_id,
+                                    delta top_delta,  
+                                    (delta / total) * 100 AS top_pct,  
+                                    total AS top_total  
+                  FROM     (SELECT dbid, sql_id,  
+                                   plan_hash_value,  
+                                   parsing_user_id,  
+                                   SUM(NVL(elapsed_time_delta,0)) OVER (PARTITION BY 1) total,
+                                   SUM(NVL(elapsed_time_delta,0)) OVER (PARTITION BY dbid,sql_id,plan_hash_value,parsing_user_id) delta  
+                            FROM sqlstat WHERE plan_hash_value > 0  
+                                   ) x  
+                  ORDER BY top_pct DESC)  
+          WHERE  ROWNUM <= 10 ),  
+top_w_user as (
+    select top.*,
+           d.username
+    from top, dba_hist_users d
+    where d.dbid=top.dbid
+    and d.user_id=top.parsing_user_id
+),
+plandate  
+      AS (SELECT *  
+          FROM   (SELECT DISTINCT sql_id, plan_hash_value, operation,  
+                         MIN(TIMESTAMP) OVER(PARTITION BY sql_id, plan_hash_value, operation ) plan_date
+                  FROM   dba_hist_sql_plan p  
+                  WHERE  id=0  
+                  AND    (sql_id,plan_hash_value) IN ( select sql_id,plan_hash_value FROM top ) and plan_hash_value > 0 )),  
+snap_top_cp AS (  
+    SELECT snaps.*, 
+           top_w_user.username,
+           top_w_user.sql_id, 
+           top_w_user.plan_hash_value, 
+           top_w_user.top_pct, 
+           top_w_user.top_delta, 
+           top_w_user.top_total, 
+           top_w_user.rank, 
+           plandate.operation, 
+           plandate.plan_date
+    FROM snaps,top_w_user,plandate WHERE top_w_user.sql_id=plandate.sql_id(+) AND top_w_user.plan_hash_value=plandate.plan_hash_value(+) ),  
+ data AS ( SELECT   sh.dbid,sh.snap_id,sh.begin_interval_time, 
+          stat.sql_id,  
+          stat.plan_hash_value,  
+          NVL(stat.elapsed_time_delta,0) delta  
+ FROM     top_w_user top,  
+          sqlstat stat,  
+          snaps sh  
+          WHERE    stat.sql_id (+)  = top.sql_id  
+          AND      stat.plan_hash_value (+)  = top.plan_hash_value  
+          AND      stat.dbid = sh.dbid  
+          AND      stat.instance_number = sh.instance_number  
+          AND      stat.snap_id = sh.snap_id  
+          )  
+ SELECT s.begin_interval_time time ,  
+        s.sql_id,
+        s.plan_hash_value,
+        s.plan_date,
+        TO_CHAR(rank, '09' ) ||' '|| 
+        TO_CHAR(top_pct, '09' )||' '||
+        s.sql_id ||' '||TO_CHAR(s.plan_hash_value, '999999999999999')||' '||username as src,  
+        s.rank as rank,  
+        NVL(p.delta,0) as metrics,  
+        NVL(s.top_delta,0) as top_delta,  
+        NVL(s.top_pct,0) as top_pct,  
+        NVl(s.top_total,0) as top_total,  
+        s.operation,
+        s.username
+ FROM (  
+     SELECT data.snap_id,
+            data.begin_interval_time,  
+            data.dbid,  
+            data.sql_id,  
+            data.plan_hash_value,  
+            data.delta  
+     FROM   data  
+       ) p ,  snap_top_cp s  
+     WHERE p.snap_id (+) = s.snap_id  
+     AND   p.dbid (+) = s.dbid  
+     AND   p.sql_id (+) = s.sql_id  
+     AND   p.plan_hash_value (+) = s.plan_hash_value  
+ ORDER BY s.top_pct,s.begin_interval_time DESC
+': ORA-00942: table or view does not exist
